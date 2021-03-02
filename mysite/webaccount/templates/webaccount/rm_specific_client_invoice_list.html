@@ -1,0 +1,86 @@
+{% extends 'webaccount/base_rm.html' %}
+{% load static %}
+{% block title %}Report List{% endblock %}
+{% block content %}
+<div class="mx-auto w-600 mt-5">
+  <div class="card shadow border-0 wr-55 mb-4">
+    <div class="card-header bg-transparent border-0">
+      <h3 class="card-title text-left text-primary">
+            {{  client.Name }}'s Invoice List
+        </h3>
+        <div class="col-12 text-right">
+          <h4><a href="{% url 'ADD_SPECIFIC_CLIENT_INVOICE_ENTRY_URL' client.id %}" class="card-link ">Add New Invoice</a></h4>
+        </div>
+          
+    </div>
+
+    <div class="card-body">
+        <table class="table table-striped">
+          <nav class="nav">
+        
+              
+
+              <form method="get">
+                <input class="form-control mr-sm-2 col-4" id="id_id" type="search" placeholder="Search By Invoice ID" aria-label="Search" name="id" {% if filter.form.id.value %} value="{{ filter.form.id.value }}"  {% endif %} onchange="this.form.submit();">
+
+                  <select name="statusType" id="id_statusType"  class="form-control col-3" onchange="this.form.submit();">
+                    <option  value=""  > All</option>
+  
+  
+                  <option value="New"  {% if filter.form.statusType.value == "New" %} selected="" {% endif %}>New</option>
+  
+                  <option value="Approved" {% if filter.form.statusType.value == "Approved" %} selected="" {% endif %}>Approved</option>
+  
+                  <option value="Rejected" {% if filter.form.statusType.value == "Rejected" %} selected="" {% endif %}>Rejected</option>
+  
+                  <option value="Processing" {% if filter.form.statusType.value == "Processing" %} selected="" {% endif %}>Processing</option>
+  
+                  <option value="Pending" {% if filter.form.statusType.value == "Pending" %} selected="" {% endif %}>Pending</option>
+  
+  
+                </select>
+  
+  
+              </form>
+  
+  
+          </nav>
+          <thead>
+              <tr>
+                <th >Invoice No.</th>
+                <th >Submitting Date</th>
+                <th >Status</th>
+                <th >Last Update</th>
+                  <th>View</th>
+              </tr>
+            </thead>
+            <tbody>
+
+
+              {% for obj in filter.qs %}
+              
+              <tr>
+              <td><p  class="font-weight-bold p-0 m-0" > {{ obj.id }} </p></td>
+              <td>{{ obj.submittingDate|date:"d-m-Y" }}</td>
+              <td>{{ obj.statusType }}</td>
+              <td>{{ obj.lastUpdate|date:"d-m-Y H:i" }}</td>
+              <td><a class="card-link " href="{% url 'READ_SPECFIC_CLIENT_INVOICE_ENTRY_URL' obj.client.id obj.id  %}">Update Invoice</a></td>
+      
+              </tr>
+              {% empty %}
+              <tr>
+              <td colspan="6">
+              No data has been entered yet.
+              </td>
+      
+              </tr>
+              {% endfor %}
+              </tbody>
+        </table>
+    </div>
+
+    </div>
+    </div>
+
+
+{% endblock %}

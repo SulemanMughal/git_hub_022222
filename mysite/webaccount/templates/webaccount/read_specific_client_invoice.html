@@ -1,0 +1,139 @@
+{% extends 'webaccount/base_rm.html' %}
+{% load static %}
+{% block title %}{{ client.Name }}'s' Invoice{% endblock %}
+{% block content %}
+
+
+<div class="mx-auto w-600 mt-5">
+    <div class="card shadow border-0 wr-55 mb-4">
+        <div class="card-header bg-transparent border-0">
+        <h3 class="card-title text-left text-primary">
+            Invoice #{{ obj.id }}  Details 
+            </h3>
+            <p class="card-text font-weight-bolder">
+                status : {{ obj.statusType }}
+            </p>
+        </div>
+        <div class="card-body">
+            <div class="container bg-light">
+                <div class="row">
+                    <div class="col">
+                        <div class="row">
+                            <div class="col">
+                                <h2 class="card-title font-weight-bolder">
+                                    Client Information
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                Name
+                            </div>
+                            <div class="col">
+                                {{ client.Name }}
+                            </div>
+                            <div class="col"></div>
+                            <div class="col"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                Email
+                            </div>
+                            <div class="col">
+                                {{ client.Email }}
+                            </div>
+                            <div class="col">
+                                Phone Number
+                            </div>
+                            <div class="col">
+                                {{ client.Phone_Number }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="container ">
+                <div class="row">
+                    <div class="col-12 col-lg-6  bg-light">
+                        <div class="row">
+                            <div class="col">
+                                <h2 class="card-title font-weight-bolder">
+                                    Invoice
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                Submitting Date
+                            </div>
+                            <div class="col">
+                                {{ obj.submittingDate }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                Invoice Document
+                            </div>
+                            <div class="col">
+                                <a href="/media/{{ obj.uploadFile }}"  target="_blank">View Document</a>
+                            </div>
+                            
+                        </div>
+                        <div class="row">
+                            <div class="col-12">Comments</div>
+                            {% for i in comments %}
+                                <div class="col-12 ">
+                                    <p class="font-weight-bolder float-right">{{ i.comment }}</p>
+                                </div>
+                            {% endfor %}
+                            <form action="{% url 'UPDATE_SPECIFIC_CLIENT_INVOICE_ENTRY_COMMENTS_URL' client.id obj.id %}" method="POST" class="col-12"> 
+                                {% csrf_token %}
+                                <textarea class="form-control col-12" id="exampleFormControlTextarea1" rows="3" name="comment" {% if  obj.statusType == 'Processed' %} disabled {% endif %} >{{ obj.comment }}</textarea>
+                                {% if  not obj.statusType == 'Processed' %} 
+                                    <input type="submit" value="Send Comment" class="btn btn-primary mt-2"> 
+                                {% endif %}
+                            </form>
+                            
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-5 ml-lg-2 bg-light">
+                        <div class="row">
+                            <div class="col">
+                                <h2 class="card-title font-weight-bolder">
+                                    Update the status
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">Status</div>
+                            <form action="{% url 'UPDATE_SPECIFIC_CLIENT_INVOICE_ENTRY_URL' client.id obj.id %}" method="POST" >
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <select class="form-control" id="exampleFormControlSelect1" name="statusType" {% if obj.statusType == 'Processed' %} disabled {% endif %}>
+                                      <option value="New" {% if obj.statusType == 'New' %} selected="" {% endif %}>NEW</optio>
+                                      <option value="Approved" {% if obj.statusType == 'Approved' %} selected="" {% endif %}>APPROVED</option>
+                                      <option value="Rejected" {% if obj.statusType == 'Rejected' %} selected="" {% endif %}>REJECTED</option>
+                                      <option value="Processed" {% if obj.statusType == 'Processed' %} selected="" {% endif %}  >Processed</option>
+                                      <option value="Postponed" {% if obj.statusType == 'Postponed' %} selected="" {% endif %}>Postponed</option>
+                                    </select>
+                                  </div>
+                                  {% if not obj.statusType == 'Processed' %} 
+                                    <input type="submit" value="Update Status" class="btn btn-success">
+                                  {% endif %}
+                            </form>
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    </div>
+
+    {% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'webaccount/base_rm.html' %}
+{% load static %}
+{% block title %}Client List{% endblock %}
+
+
+{% block content %}
+<div class="mx-auto w-400 mt-5">
+  <div class="card shadow border-0 wr-25 mb-4">
+    <div class="card-header bg-transparent border-0">
+      <h3 class="card-title text-left text-primary">
+          <a href="{% url 'Invoices_List_URL' %}">
+            Client Invoices List
+          </a></h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped">
+            <thead>
+              <tr>
+                <th >Name</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for obj in client_list %}
+              <tr>
+                <td>{{ obj }}</td>
+
+              </tr>
+              {% empty %}
+              <tr>
+                <td>No data has been entered yet.</td>
+
+              </tr>
+              {% endfor %}
+
+            </tbody>
+          </table>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

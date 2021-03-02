@@ -1,0 +1,55 @@
+{% extends 'webaccount/base_rm.html' %} 
+{% load static %} 
+{% block title %}Sales Invoice List{% endblock %} 
+{% block content %}
+
+<div class="mx-auto w-500 mt-5">
+  <div class="card shadow border-0 wr-45 mb-4">
+    <div class="card-header bg-transparent border-0">
+      <h3 class="card-title text-left text-primary">
+            Sales Invoice List
+      </h3>
+    </div>
+    <div class="card-body">
+        <form method="POST" action=".">
+            {% csrf_token %}
+            <input type="text" name="company" class="form-control" placeholder="Company" onchange="this.form.submit();">
+        </form>
+        
+            {% if doc_list %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                          <th>
+                              ID
+                          </th>
+                          <th>
+                              Name
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                {% for i in doc_list %}
+                        <tr>
+                        {% for key,value in i.items %}
+                                {% if key == "name" %}
+                                <td >
+                                    <a href="{% url 'CLIENT_API_details' value %}" class="card-link" target="_blank">{{ value }}</a>
+                                </td>
+                                {% elif key == "customer_name" %}
+                                <td>
+                                    {{ value }}
+                                </td>
+                                {% endif %}
+                        {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+            {% endif %}
+        
+    </div>
+  </div>
+</div>
+
+{% endblock %}

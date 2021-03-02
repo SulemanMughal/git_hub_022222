@@ -1,0 +1,158 @@
+{% extends 'webaccount/base_rm.html' %}
+{% load static %}
+{% block title %}Report List{% endblock %}
+{% block content %}
+<div class="mx-auto w-600 mt-5">
+  <div class="card shadow border-0 wr-55 mb-4">
+    <div class="card-header bg-transparent border-0">
+      <h3 class="card-title text-left text-primary">
+            {{  client.Name }}'s Report List
+        </h3>
+          <div class="col-12 text-right">
+            <a href="{% url 'Reports_List_Add_URL' client.id %}" >
+              Add New Report
+            </a>
+          </div>
+    </div>
+    <div class="card-body">
+        <table class="table table-striped">
+          <nav class="nav">
+            <form method="get">
+              <input type="number" title="Search By Report ID" name="id" value="{{ filter.form.id.value  }}" step="any" id="id_id" class="form-control col-2" placeholder="Search By Report-ID" >
+              <select name="reportType" id="id_reportType" class="form-control col-3" title="Filter By Type" onchange="this.form.submit();">
+                <option value=""  > All</option>
+                <option value="VAT Report" {% if filter.form.reportType.value == "VAT Report" %} selected="" {% endif %}>VAT Report</option>
+                <option value="Ratio Analysis Report" {% if filter.form.reportType.value == "Ratio Analysis Report" %} selected="" {% endif %}>Ratio Analysis Report</option>
+                <option value="Income Statement" {% if filter.form.reportType.value == "Income Statement" %} selected="" {% endif %}>Income Statement</option>
+                <option value="Balance Sheet" {% if filter.form.reportType.value == "Balance Sheet" %} selected="" {% endif %}>Balance Sheet</option>
+                <option value="Profit & Loss" {% if filter.form.reportType.value == "Profit & Loss" %} selected="" {% endif %}>Profit & Loss</option>
+              </select>
+              <select name="dateYear" title="Filter By Year" id="id_dateYear" class="form-control col-2" onchange="this.form.submit();">
+                <option value=""  > All</option>
+                <option value="2025" {% if filter.form.dateYear.value == "2025" %} selected="" {% endif %}>2025</option>
+                <option value="2024" {% if filter.form.dateYear.value == "2024" %} selected="" {% endif %}>2024</option>
+                <option value="2023" {% if filter.form.dateYear.value == "2023" %} selected="" {% endif %}>2023</option>
+                <option value="2022" {% if filter.form.dateYear.value == "2022" %} selected="" {% endif %}>2022</option>
+                <option value="2021" {% if filter.form.dateYear.value == "2021" %} selected="" {% endif %}>2021</option>
+                <option value="2020" {% if filter.form.dateYear.value == "2020" %} selected="" {% endif %}>2020</option>
+                <option value="2019" {% if filter.form.dateYear.value == "2019" %} selected="" {% endif %}>2019</option>
+                <option value="2018" {% if filter.form.dateYear.value == "2018" %} selected="" {% endif %}>2018</option>
+                <option value="2017" {% if filter.form.dateYear.value == "2017" %} selected="" {% endif %}>2017</option>
+                <option value="2016" {% if filter.form.dateYear.value == "2016" %} selected="" {% endif %}>2016</option>
+                <option value="2015" {% if filter.form.dateYear.value == "2015" %} selected="" {% endif %}>2015</option>
+                <option value="2014" {% if filter.form.dateYear.value == "2014" %} selected="" {% endif %}>2014</option>
+                <option value="2013" {% if filter.form.dateYear.value == "2013" %} selected="" {% endif %}>2013</option>
+                <option value="2012"{% if filter.form.dateYear.value == "2012" %} selected="" {% endif %} >2012</option>
+                <option value="2011"{% if filter.form.dateYear.value == "2011" %} selected="" {% endif %} >2011</option>
+                <option value="2010"{% if filter.form.dateYear.value == "2010" %} selected="" {% endif %} >2010</option>
+                <option value="2009"{% if filter.form.dateYear.value == "2009" %} selected="" {% endif %} >2009</option>
+                <option value="2008" {% if filter.form.dateYear.value == "2008" %} selected="" {% endif %}>2008</option>
+                <option value="2007" {% if filter.form.dateYear.value == "2007" %} selected="" {% endif %}>2007</option>
+                <option value="2006" {% if filter.form.dateYear.value == "2006" %} selected="" {% endif %}>2006</option>
+                <option value="2005" {% if filter.form.dateYear.value == "2005" %} selected="" {% endif %}>2005</option>
+                <option value="2004" {% if filter.form.dateYear.value == "2004" %} selected="" {% endif %}>2004</option>
+                <option value="2003" {% if filter.form.dateYear.value == "2003" %} selected="" {% endif %}>2003</option>
+                <option value="2002" {% if filter.form.dateYear.value == "2002" %} selected="" {% endif %}>2002</option>
+                <option value="2001" {% if filter.form.dateYear.value == "2001" %} selected="" {% endif %}>2001</option>
+                <option value="2000" {% if filter.form.dateYear.value == "2000" %} selected="" {% endif %}>2000</option>
+                <option value="1999" {% if filter.form.dateYear.value == "1999" %} selected="" {% endif %}>1999</option>
+                <option value="1998" {% if filter.form.dateYear.value == "1998" %} selected="" {% endif %}>1998</option>
+                <option value="1997" {% if filter.form.dateYear.value == "1997" %} selected="" {% endif %}>1997</option>
+                <option value="1996" {% if filter.form.dateYear.value == "1996" %} selected="" {% endif %}>1996</option>
+                <option value="1995" {% if filter.form.dateYear.value == "1995" %} selected="" {% endif %}>1995</option>
+                <option value="1994" {% if filter.form.dateYear.value == "1994" %} selected="" {% endif %}>1994</option>
+                <option value="1993" {% if filter.form.dateYear.value == "1993" %} selected="" {% endif %}>1993</option>
+                <option value="1992" {% if filter.form.dateYear.value == "1992" %} selected="" {% endif %}>1992</option>
+                <option value="1991" {% if filter.form.dateYear.value == "1991" %} selected="" {% endif %}>1991</option>
+                <option value="1990" {% if filter.form.dateYear.value == "1990" %} selected="" {% endif %}>1990</option>
+                <option value="1989"{% if filter.form.dateYear.value == "1989" %} selected="" {% endif %}>1989</option>
+                <option value="1988"{% if filter.form.dateYear.value == "1988" %} selected="" {% endif %}>1988</option>
+                <option value="1987"{% if filter.form.dateYear.value == "1987" %} selected="" {% endif %}>1987</option>
+                <option value="1986"{% if filter.form.dateYear.value == "1986" %} selected="" {% endif %}>1986</option>
+                <option value="1985"{% if filter.form.dateYear.value == "1985" %} selected="" {% endif %}>1985</option>
+                <option value="1984" {% if filter.form.dateYear.value == "1984" %} selected="" {% endif %}>1984</option>
+                <option value="1983" {% if filter.form.dateYear.value == "1983" %} selected="" {% endif %}>1983</option>
+                <option value="1982" {% if filter.form.dateYear.value == "1982" %} selected="" {% endif %}>1982</option>
+                <option value="1981" {% if filter.form.dateYear.value == "1981" %} selected="" {% endif %}>1981</option>
+              </select>
+              <select name="month_quarterType" title="Filter By Month/Quarter" id="id_month_quarterType" class="form-control col-2" onchange="this.form.submit();">
+                <option value=""  > All</option>
+                <option value="JANUARY" {% if filter.form.month_quarterType.value == "JANUARY" %} selected="" {% endif %}>JANUARY</option>
+                <option value="FEBRUARY" {% if filter.form.month_quarterType.value == "FEBRUARY" %} selected="" {% endif %}>FEBRUARY</option>
+                <option value="MARCH" {% if filter.form.month_quarterType.value == "MARCH" %} selected="" {% endif %}>MARCH</option>
+                <option value="APRIL" {% if filter.form.month_quarterType.value == "APRIL" %} selected="" {% endif %}>APRIL</option>
+                <option value="MAY" {% if filter.form.month_quarterType.value == "MAY" %} selected="" {% endif %}>MAY</option>
+                <option value="JUNE" {% if filter.form.month_quarterType.value == "JUNE" %} selected="" {% endif %}>JUNE</option>
+                <option value="JULY" {% if filter.form.month_quarterType.value == "JULY" %} selected="" {% endif %}>JULY</option>
+                <option value="AUGUST" {% if filter.form.month_quarterType.value == "AUGUST" %} selected="" {% endif %}>AUGUST</option>
+                <option value="SEPTEMBER" {% if filter.form.month_quarterType.value == "SEPTEMBER" %} selected="" {% endif %}>SEPTEMBER</option>
+                <option value="OCTOBER" {% if filter.form.month_quarterType.value == "OCTOBER" %} selected="" {% endif %}>OCTOBER</option>
+                <option value="NOVEMBER" {% if filter.form.month_quarterType.value == "NOVEMBER" %} selected="" {% endif %}>NOVEMBER</option>
+                <option value="DECEMBER" {% if filter.form.month_quarterType.value == "DECEMBER" %} selected="" {% endif %}>DECEMBER</option>
+                <option value="Q1" {% if filter.form.month_quarterType.value == "Q1" %} selected="" {% endif %}>Q1</option>
+                <option value="Q2" {% if filter.form.month_quarterType.value == "Q2" %} selected="" {% endif %}>Q2</option>
+                <option value="Q3" {% if filter.form.month_quarterType.value == "Q3" %} selected="" {% endif %}>Q3</option>
+                <option value="Q4" {% if filter.form.month_quarterType.value == "Q4" %} selected="" {% endif %}>Q4</option>
+              </select>
+              <select name="status" title="Filter By Status" id="id_status" class="form-control col-2" onchange="this.form.submit();">
+                <option value="" >All</option>
+                <option value="Not Confirmed"  {% if filter.form.status.value == "Not Confirmed" %} selected="" {% endif %}>Not Confirmed</option>
+                <option value="Confirmed" {% if filter.form.status.value == "Confirmed" %} selected="" {% endif %}>Confirmed</option>
+              </select>
+            </form>
+          </nav>
+            <thead>
+              <tr>
+                <th >ID</th>
+                <th >Report Type</th>
+                <th >Period</th>
+                <th >Issue Date</th>
+                <th >Final Report Status</th>
+                <th >View Reports</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for obj in filter.qs %}
+              <tr>
+                <td>
+                    <span >
+                      {{ obj.id }}
+                    </span>
+                  </td>
+                  <td>
+                   <span>
+                     {{ obj.reportType }}
+                   </span>
+                  </td>
+                  <td>
+                    <span>
+                      {{ obj.dateYear }}-{{ obj.month_quarterType }}
+                    </span>
+                   </td>
+                   <td>
+                    <span>
+                      {{ obj.finalReportIssueDate }}
+                    </span>
+                   </td>
+                   <td>
+                    <span>
+                      {{ obj.status }}
+                    </span>
+                   </td>
+                   <td>
+                    <span>
+                      <a href="{% url 'Read_Client_Report_URL' client.id obj.id  %}">View Report</a>
+                    </span>
+                   </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5">No data has been entered yet.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

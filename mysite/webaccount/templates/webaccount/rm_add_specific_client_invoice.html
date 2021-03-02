@@ -1,0 +1,39 @@
+{% extends 'webaccount/base_rm.html' %}
+{% load static %}
+{% block title %}Add Invoice{% endblock %}
+{% block content %}
+
+
+<div class="mx-auto w-600 mt-5">
+    <div class="card shadow border-0 wr-55 mb-4">
+        <div class="card-header bg-transparent border-0">
+        <h3 class="card-title text-left text-primary">
+                {{  client.Name }}'s New Invoice Entry
+            </h3>
+        </div>
+        <div class="card-body">
+            <form action="{% url 'ADD_SPECIFIC_CLIENT_INVOICE_ENTRY_URL' client.id %}" method="POST"  enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <p><textarea class="form-control col-12" id="exampleFormControlTextarea1" rows="3" name="comment" placeholder="Comment"></textarea></p>
+                <input type="submit" value="Add" class="btn btn-success mt-2">
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"
+    ></script>
+
+<script>
+    $(document).ready(function()
+    {
+        $("#id_uploadFile, #id_comment").addClass("form-control");
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,162 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+{% block title %}Packages{% endblock %}
+{% block content %}
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+<script>
+        $(document).ready(function(){
+            $('a[data-target="#exampleModaldeletepackage"]').on("click", function(){
+                $("#exampleModalLabeldeletepackageBOdy").html("");
+                $("#exampleModalLabeldeletepackageBOdy").html("Are sure you want to delete <span class='font-weight-bolder text-danger'>Package #" + $(this).attr("data-data-id") + "</span>");
+                $("#delete-button").attr("href", $(this).attr("data-href"));
+            });
+        });
+</script>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModaldeletepackage" tabindex="-1" aria-labelledby="exampleModalLabeldeletepackage" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabeldeletepackage">Confirmation</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="exampleModalLabeldeletepackageBOdy">
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <a type="button" class="btn btn-danger" href="#!" id="delete-button">Delete</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+<div class="mx-auto w-700  my-5" >
+    <div class="card shadow border-0 wr-60 mb-4"  >
+        <div class="card-header bg-transparent border-0">
+            <h3 class="card-title text-center text-primary font-weight-bolder display-4">Packages</h3>
+            <div class="container">
+                <div class="row mt-4">
+                    <div class="col text-right">
+                        <a href="{% url 'NEW_PACKAGE_URL' %}" class="card-link h4 font-weight-normal text-dark"> Add New Package <i class="fas fa-plus"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card-body">
+            <div class="container">
+                <div class="row mb-5 justify-content-end">
+                    <div class="col-6">
+                        <form method="GET">
+                            <input type="number" name="id" step="any" id="id_id" class="form-control" autocomplete="off" placeholder="Search by Package ID" {% if filter.form.id.value %} value="{{ filter.form.id.value }}"  {% endif %} onchange="this.form.submit();">
+                    </form>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped table-bordered">
+                
+                <caption>{{ filter.qs.count }} Packages</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Package ID</th>
+                    <th scope="col">Sector</th>
+                    <th scope="col">No. of branched</th>
+                    <th scope="col">No. of Employees</th>
+                    <th scope="col">Period</th>
+                    <th scope="col">Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% if objs %}
+                        {% for obj in filter.qs %}
+                            <tr id="">
+                                <td class="font-weight-bolder h4 my-1 py-2 col-2">
+                                    <a href="{% url  'DETAIL_PACKAGE_URL' obj.id %}" title="View Details">{{ obj.id }}</a>
+                                </td>
+                                <td class="col-2">
+                                    {{ obj.sector }}
+                                </td>
+                                <td class="col-2">
+                                    {{ obj.number_of_branches }}
+                                </td>
+                                <td class="col-2">
+                                    {{ obj.number_of_employees }}
+                                </td>
+                                <td class="col-2">
+                                    {{ obj.period }}
+                                </td>
+                                <td class="col-2">
+                                        <span class="text-left font-weight-bolder h5">{{ obj.price }} </span>
+                                        <a class="text-right float-right card-link text-dark" data-href="{% url 'DELETE_PACKAGE_URL' obj.id %}" data-toggle="modal" data-target="#exampleModaldeletepackage"  data-data-id="{{ obj.id }}"
+                                        ><i class="fas fa-trash-alt" ></i></a>
+                                        <a class="text-right float-right mr-3 text-dark" href="{% url 'EDIT_PACKAGE_URL' obj.id %}"><i class="fas fa-edit"></i></a>
+                                        
+                                </td>
+                            </tr>
+                            {% empty  %}
+                                <tr>
+                                    <td colspan="6">
+                                        <p class="text-muted font-weight-bolder" >No Pacakge has been found.</p>
+                                    </td>
+                                </tr>
+                        {% endfor %}
+                    {% else %}
+                            <tr>
+                                <td colspan="6">
+                                    <p class="text-muted font-weight-bolder" >No Pacakge has been added yet.</p>
+                                </td>
+                            </tr>
+                    {% endif %}
+                </tbody>
+              </table>
+              {% if not search %}
+              <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                                Previous
+                            </a>
+                        </li>
+                    {%  endif %}
+                    <li class="page-item"><a class="page-link" href="#">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a></li>
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                            Next
+                        </a>
+                      </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% else %}
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                  <li class="page-item">
+                    <a class="page-link" href="?page=1" aria-label="Previous">
+                      Show Package List
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+{% block title %}Add New Pacakge {% endblock %}
+{% block content %}
+<div class="mx-auto w-400 mt-5" >
+    <div class="card shadow border-0 wr-25 mb-4"  >
+        <div class="card-header bg-transparent border-0">
+            <h3 class="card-title text-center text-primary">Add New Package</h3>
+        </div>
+        <div class="card-body">
+            <form action="{% url  'NEW_PACKAGE_URL' %}" method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Submit" class="btn btn-success w-100 col-12"> 
+                <a type="button" value="Cancel" class="btn btn-danger w-100 col-12 mt-2" href="{% url 'PACKAGE_LIST_URL' %}">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

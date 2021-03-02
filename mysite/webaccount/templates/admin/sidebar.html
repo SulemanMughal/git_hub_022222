@@ -1,0 +1,107 @@
+{% if request.user.is_authenticated  %}
+      {% ifequal request.user.is_superuser "False" %}
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <i class="fas fa-address-book"></i> Clients
+                </a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="#">
+                    <i class="fas fa-address-book"></i> Reports
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">
+                    <i class="fas fa-address-book"></i> Invoices
+                  </a>
+                </li>
+            </ul>
+          </div>
+        </nav>
+      {% else %}
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'ADMIN_DASHBOARD_URL' %}">
+                  Dashboard
+                </a>
+              </li>
+              <li class="nav-item bg-primary">
+                <a class="nav-link  text-white font-weight-bold" href="#">
+                  Auth
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/accounts/user/">
+                  <i class="far fa-user"></i> Users
+                </a>
+              </li>
+              <li class="nav-item bg-primary">
+                <a class="nav-link  text-white" href="#">
+                  Webaccount
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/webaccount/client_personal_info/">
+                  <i class="fas fa-address-book"></i> Clients
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/webaccount/consulatationrequest/">
+                  <i class="fas fa-address-book"></i> Consultation Requests
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/webaccount/clientreport/">
+                  <i class="fas fa-file"></i> Client Reports
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/webaccount/clientinvoice/">
+                  <i class="fas fa-file"></i> Client Invoices
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/webaccount/sector/">
+                  <i class="fas fa-building"></i> Sectors
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/webaccount/consultantmodel/">
+                  <i class="fas fa-building"></i> Consultant Fields
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/webaccount/shipping/">
+                  <i class="fas fa-building"></i> Shipping
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/webaccount/pickuprequestorders/">
+                  <i class="fas fa-building"></i> Pickup Order Requests
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin/webaccount/required_documents/">
+                  <i class="fas fa-file"></i> Required Documents
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'PACKAGE_LIST_URL' %}">
+                  <i class="fas fa-box-open"></i> Packages
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/support/">
+                  <i class="fas fa-question-circle"></i> Support
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      {% endifequal  %}
+      {% endif %}

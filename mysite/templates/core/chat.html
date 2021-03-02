@@ -1,0 +1,122 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block title %}Support | Accounting{% endblock %}
+
+{% block content %}
+<style>
+    .avatar{
+        font-weight: bolder !important;
+    }
+    li.message.right{
+        margin-top: 5px !important;
+        margin-bottom: 5px !important;
+        padding-left: 6px !important;
+        border-bottom: 1px solid darkgray !important;
+    }
+    li.message.right:hover, a.list-group-item.user:hover{
+        background-color: gainsboro !important;
+    }
+
+    li.message.right div.text_wrapper div.text span.small{
+        opacity: 0.5;
+    }
+
+    li.message.right div.text_wrapper div.text {
+        font-size: 14px !important;
+    }
+
+    a.list-group-item.user{
+        border: 1px solid darkgray !important;
+    }
+
+</style>
+
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+
+
+    <div class="mx-auto wr-55 mt-2">
+        <div class="container">
+            <div class="row mt-0 mb-0 pt-0 pb-0">
+                <div class="col">
+                    <h1 class="card-title">
+                        Support
+                    </h1>
+                </div>
+            </div>
+            <div class="row">
+                
+                <div class="col-md-3 pr-0">
+                    <div class="panel-heading card-header ">
+                        <h4 class="list-group-item-heading ">Users</h4>
+                    </div>
+                    <input type="text" id="myInput">
+                    <div id="user-list" class="list-group overflow-auto" style="height: 360px !important;">
+                       
+
+                            {# Users go here #}
+
+
+                    </div>
+                </div>
+                <div class="col-md pl-0 border pr-0">
+                    <div class="panel panel-info">
+                        <div class="panel-heading card-header">
+                            <h4 class="panel-title font-weight-bolder">Chat</h4>
+                        </div>
+                        <div>
+                            <ul id="messages" class="messages overflow-auto pt-3 ml-0  pl-0" style="height: 360px !important;">
+                                {# Messages go here #}
+                            </ul>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="input-group">
+                                <input id="chat-input" type="text"
+                                       class="form-control input"
+                                       placeholder="Type your message here ..."
+                                       maxlength="500">
+                                <span class="input-group-btn">
+                                <button class="btn btn-info btn"
+                                        id="btn-send">
+                                    Send</button>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+    
+    
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+    
+
+    <script>
+        let sessionKey = '{{ request.session.session_key }}';
+        let currentUser = '{{ request.user.username }}';
+    </script>
+    <script src="{% static 'js/app.js' %}"></script>
+
+    <script>
+        $("#myInput").on("keyup", function() {
+      var value = this.value.toLowerCase().trim();
+      $("#user-list a").show().filter(function() {
+          
+        return $(this).html().toLowerCase().trim().indexOf(value) == -1;
+      }).hide();
+    });
+    </script>
+
+    <script>
+        
+            $("#user-list").on("click", function(){
+                        $("#myInput").val("");
+                        $.each($("#user-list a"), function(){
+                            $(this).show();
+                        });
+            });
+        
+    </script>
+
+{% endblock %}

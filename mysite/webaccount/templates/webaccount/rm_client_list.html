@@ -1,0 +1,88 @@
+{% extends 'webaccount/base_rm.html' %}
+{% load static %}
+{% block title %}Client List{% endblock %}
+
+
+
+
+{% block content %}
+<div class="mx-auto w-500 mt-5">
+  <div class="card shadow border-0 wr-45 mb-4">
+    <div class="card-header bg-transparent border-0">
+      <h3 class="card-title text-left text-primary">
+          <a href="{% url 'Client_List_URL' %}">
+            Client List
+          </a></h3>
+    </div>
+    <div class="card-body">
+
+
+      <table class="table table-striped">
+        <nav class="nav">
+          
+          
+
+            <form method="get">
+
+              
+              <input class="form-control mr-sm-2 col-4" type="search" placeholder="Client Name" aria-label="Search" name="Name" {% if filter.form.Name.value %} value="{{ filter.form.Name.value }}"  {% endif %} onchange="this.form.submit();">
+
+                <select name="status" id="id_status"  class="form-control col-3" onchange="this.form.submit();">
+                  <option  value=""  > All</option>
+
+
+                <option value="New"  {% if filter.form.status.value == "New" %} selected="" {% endif %}>New</option>
+
+                <option value="Active" {% if filter.form.status.value == "Active" %} selected="" {% endif %}>Active</option>
+
+                <option value="Pending" {% if filter.form.status.value == "Pending" %} selected="" {% endif %}>Pending</option>
+
+                <option value="Completed" {% if filter.form.status.value == "Completed" %} selected="" {% endif %}>Completed</option>
+
+                <option value="Disabled" {% if filter.form.status.value == "Disabled" %} selected="" {% endif %}>Disabled</option>
+
+
+              </select>
+
+
+            </form>
+
+
+        </nav>
+        <thead>
+          <tr>
+            <th >ID</th>
+            <th >Name</th>
+            <th >Email</th>
+            <th >Company Name</th>
+            <th >Status</th>
+          </tr>
+        </thead>
+        <tbody>
+
+
+        {% for obj in filter.qs %}
+        <tr>
+        <td><a href="{% url 'Client_Reports_URL'  obj.id %}" class="font-weight-bold"> {{ obj.id }} </a></td>
+        <td>{{ obj.Name }}</td>
+        <td>{{ obj.Email }}</td>
+        <td>{{ obj.company_name }}</td>
+        <td>{{ obj.status }}</td>
+
+        </tr>
+        {% empty %}
+        <tr>
+        <td colspan="6">
+        No data has been entered yet.
+        </td>
+
+        </tr>
+        {% endfor %}
+        </tbody>
+  </table>
+
+
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,274 @@
+{% load i18n static %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Boostrap -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.0/css/bootstrap.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Lato:300,400,700"
+    />
+    <link rel="dns-prefetch" href="https://use.fontawesome.com" />
+    <link
+      rel="stylesheet"
+      id="fontawesome-css"
+      href="https://use.fontawesome.com/releases/v5.2.0/css/all.css?ver=5.2.0"
+      type="text/css"
+      media="all"
+    />
+
+    <!-- End of Boostrap -->
+
+    <!-- Custom -->
+    <link rel="stylesheet" href="{% static 'admin/css/base_2.css' %}" />
+    <link href="{% static 'admin/css/dashboard_2.css' %}" rel="stylesheet" />
+    <!-- End of Custom -->
+
+    <style>
+      ul li {
+        list-style-type: none;
+      }
+
+      .pr-85 {
+        padding-right: 85px;
+      }
+
+      .position-36 {
+        right: 36px;
+      }
+
+      .wr-30 {
+        width: 30rem;
+      }
+
+      .mt-50 {
+        margin-top: 60px !important;
+      }
+
+      .w-500{
+        width: 500px !important;
+      }
+
+      .wr-55{
+        width: 55rem !important;
+      }
+
+      .w-600{
+        width: 600px !important;
+      }
+      ul.errorlist{
+        color: red;
+        font-weight: bolder;
+      }
+    </style>
+
+    <title>{% block title %}Relational Manager{% endblock %}</title>
+  </head>
+
+  <body>
+    <nav
+      class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow mb-5"
+      style="z-index: 999;"
+    >
+      <a class="navbar-brand" href="{% url 'RM_Dashboard_URL' %}">Accounting</a>
+
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+          {% if client_list_section %}
+          <li class="nav-item">
+
+
+          </li>
+          {% endif %}
+          <li class="nav-item font-weight-bold text-white font-size-20">
+            <a
+              class="nav-link"
+              href="{% url 'profile_url' %}"
+              tabindex="-1"
+              aria-disabled="true"
+            >
+              <i class="fas fa-id-badge"></i> {{ request.user.username }}</a
+            >
+          </li>
+
+          <li class="nav-item font-weight-bold text-white font-size-20">
+            <a
+              class="nav-link"
+              href="{% url 'change_password' %}"
+              tabindex="-1"
+              aria-disabled="true"
+              ><i class="fas fa-edit"></i> Change Password</a
+            >
+          </li>
+
+          <li class="nav-item font-weight-bold text-white font-size-20">
+            <a
+              class="nav-link"
+              href="{% url 'logout_url' %}"
+              tabindex="-1"
+              aria-disabled="true"
+              ><i class="fas fa-sign-out-alt"></i> Logout</a
+            >
+          </li>
+        </ul>
+
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+          <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Client_List_URL' %}">
+                  <i class="fas fa-address-book"></i> Clients
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Client_Invoice_List_URL' %}">
+                  <i class="fas fa-file-invoice"></i> Invoice
+                </a>
+              </li>
+              
+
+            </ul>
+          </div>
+        </nav>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 mx-auto">
+          {% block messages %} {% if messages %}
+          <ul class="list-group wr-30 mx-auto">
+            {% for message in messages %}
+            <div
+              class="alert alert-{{ message.tags }} alert-dismissible fade show shadow mx-auto wr-30 pr-85 position-36"
+              role="alert"
+            >
+              {{ message|capfirst }}
+              <button
+                type="button"
+                class="close"
+                data-dismiss="alert"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            {% endfor %}
+          </ul>
+          {% endif %} {% endblock messages %}
+          <h3
+            class="card-title text-primary font-weight-bold font-size-20 wr-25 mx-auto mt-2 text-center mt-5"
+          ></h3>
+
+          {% block content %}
+          <div class="card mx-auto mt-5 shadow mb-5 bg-white wr-45">
+            <div class="card-header">
+              <h5 class="card-title p-0 m-0 text-left">
+                <a href="{% url 'RM_Dashboard_URL' %}" class="card-link"
+                  >Relational Manager</a
+                >
+              </h5>
+            </div>
+            <div class="card-body p-0">
+              <table class="table table-hover mb-0">
+                <tbody>
+                  <tr>
+                    <th scope="row" class="col-sm-3">
+                      <a href="{% url 'Client_List_URL' %}" class="card-link">Client</a>
+                    </th>
+                  </tr>
+                  <tr>
+                    <th scope="row" class="col-sm-3">
+                      <a href="{% url 'Client_Invoice_List_URL' %}" class="card-link">Invoice</a>
+                    </th>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {% endblock %}
+        </main>
+      </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+    <script src="{% static 'admin/js/dashboard.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    
+
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+    
+
+
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+<script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-analytics.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyBG3fTy_Z5QEjAz-AWNR4GjyJmXCzxySpo",
+    authDomain: "django-admin-f9bab.firebaseapp.com",
+    projectId: "django-admin-f9bab",
+    storageBucket: "django-admin-f9bab.appspot.com",
+    messagingSenderId: "109850111862",
+    appId: "1:109850111862:web:e299306d1b76126094d457",
+    measurementId: "G-MQNTQS53K9"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+</script>
+
+  </body>
+</html>

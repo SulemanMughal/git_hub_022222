@@ -1,0 +1,1216 @@
+{% extends 'webaccount/base_rm.html' %} 
+{% load static %} 
+{% block title %}Report # {{ report.id }} Charts{% endblock %} 
+{% block content %}
+
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}" ></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+
+{% include 'webaccount/rm_charts_save_message.html' %}
+
+
+<div class="mx-auto w-600 mt-5">
+  <div class="card shadow border-0 wr-55 mb-4">
+    <div class="card-header">
+      <div class="row">
+        <div class="col">
+          <h4 class="card-title text-primary">
+            Report ID Number #{{ report.id }}
+          </h4>
+        </div>
+        <div class="col">
+          <h4 class="card-title text-right">
+            Issue Date: {{ report.finalReportIssueDate }}
+          </h4>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <h4 class="card-title text-primary">
+            {{ report.reportType }} - {{ report.dateYear }} {{ report.month_quarterType }}
+          </h4>
+        </div>
+      </div>
+      <a
+        href="{% url 'Read_Client_Report_URL' report.client.id report.id %}"
+        class="text-danger"
+        >Back To Report</a
+      >
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col">
+          <h3 class="card-title">Chart #1</h3>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col">
+          <select class="form-control" id="exampleFormControlSelect1">
+            <option value="Profit & Loss" selected="">Profit & Loss</option>
+            <option value="Expenses">Expenses</option>
+            <option value="Operating Expenses">Operating Expenses</option>
+            <option value="Cost of Sold Goods">Cost of Sold Goods</option>
+            <option value="General and Administrative">
+              General and Administrative
+            </option>
+            <option value="Profit and Loss Ratio of Revenue">
+              Profit and Loss Ratio of Revenue
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="row mb-1">
+        <div class="col">
+          <select
+            class="custom-select"
+            multiple
+            id="exampleFormControlSelectMultiple1"
+          >
+            {% for i in P1 %}
+                {% for key,value in i.items %}
+                    <option value="{{ value }}">{{ key }}</option>
+                {% endfor %}
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6">
+          <button class="btn btn-primary btn-block" id="Generate_Chart">
+            Generate Chart
+          </button>
+        </div>
+        <div class="col-6">
+          <button class="btn btn-primary btn-block" id="save_chart_1">
+            Save Charts
+          </button>
+        </div>
+      </div>
+      <canvas id="myChart"></canvas>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col">
+          <h3 class="card-title">Chart #2</h3>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col">
+          <select class="form-control" id="exampleFormControlSelect2">
+            <option value="Profit & Loss" selected="">Profit & Loss</option>
+            <option value="Expenses">Expenses</option>
+            <option value="Operating Expenses">Operating Expenses</option>
+            <option value="Cost of Sold Goods">Cost of Sold Goods</option>
+            <option value="General and Administrative">
+              General and Administrative
+            </option>
+            <option value="Profit and Loss Ratio of Revenue">
+              Profit and Loss Ratio of Revenue
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="row mb-1">
+        <div class="col">
+          <select
+            class="custom-select"
+            multiple
+            id="exampleFormControlSelectMultiple2"
+          >
+            {% for i in P1 %}
+                {% for key,value in i.items %}
+                    <option value="{{ value }}">{{ key }}</option>
+                {% endfor %}
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6">
+          <button class="btn btn-primary btn-block" id="Generate_Chart2">
+            Generate Chart
+          </button>
+        </div>
+        <div class="col-6">
+          <button class="btn btn-primary btn-block" id="save_chart_2">
+            Save Charts
+          </button>
+        </div>
+      </div>
+      <canvas id="myChart2"></canvas>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col">
+          <h3 class="card-title">Chart #3</h3>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col">
+          <select class="form-control" id="exampleFormControlSelect3">
+            <option value="Profit & Loss" selected="">Profit & Loss</option>
+            <option value="Expenses">Expenses</option>
+            <option value="Operating Expenses">Operating Expenses</option>
+            <option value="Cost of Sold Goods">Cost of Sold Goods</option>
+            <option value="General and Administrative">
+              General and Administrative
+            </option>
+            <option value="Profit and Loss Ratio of Revenue">
+              Profit and Loss Ratio of Revenue
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="row mb-1">
+        <div class="col">
+          <select
+            class="custom-select"
+            multiple
+            id="exampleFormControlSelectMultiple3"
+          >
+            {% for i in P1 %}
+            {% for key,value in i.items %}
+            <option value="{{ value }}">{{ key }}</option>
+            {% endfor %}
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6">
+          <button class="btn btn-primary btn-block" id="Generate_Chart3">
+            Generate Chart
+          </button>
+        </div>
+        <div class="col-6">
+          <button class="btn btn-primary btn-block" id="save_chart_3">
+            Save Charts
+          </button>
+        </div>
+      </div>
+      <canvas id="myChart3"></canvas>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col">
+          <h3 class="card-title">Chart #4</h3>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col">
+          <select class="form-control" id="exampleFormControlSelect4">
+            <option value="Profit & Loss" selected="">Profit & Loss</option>
+            <option value="Expenses">Expenses</option>
+            <option value="Operating Expenses">Operating Expenses</option>
+            <option value="Cost of Sold Goods">Cost of Sold Goods</option>
+            <option value="General and Administrative">
+              General and Administrative
+            </option>
+            <option value="Profit and Loss Ratio of Revenue">
+              Profit and Loss Ratio of Revenue
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="row mb-1">
+        <div class="col">
+          <select
+            class="custom-select"
+            multiple
+            id="exampleFormControlSelectMultiple4"
+          >
+          {% for i in P1 %}
+          {% for key,value in i.items %}
+              <option value="{{ value }}">{{ key }}</option>
+          {% endfor %}
+      {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6">
+          <button class="btn btn-primary btn-block" id="Generate_Chart4">
+            Generate Chart
+          </button>
+        </div>
+        <div class="col-6">
+          <button class="btn btn-primary btn-block" id="save_chart_4">
+            Save Charts
+          </button>
+        </div>
+      </div>
+      <canvas id="myChart4"></canvas>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col">
+          <h3 class="card-title">Chart #5</h3>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col">
+          <select class="form-control" id="exampleFormControlSelect5">
+            <option value="Profit & Loss" selected="">Profit & Loss</option>
+            <option value="Expenses">Expenses</option>
+            <option value="Operating Expenses">Operating Expenses</option>
+            <option value="Cost of Sold Goods">Cost of Sold Goods</option>
+            <option value="General and Administrative">
+              General and Administrative
+            </option>
+            <option value="Profit and Loss Ratio of Revenue">
+              Profit and Loss Ratio of Revenue
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="row mb-1">
+        <div class="col">
+          <select
+            class="custom-select"
+            multiple
+            id="exampleFormControlSelectMultiple5"
+          >
+          {% for i in P1 %}
+          {% for key,value in i.items %}
+              <option value="{{ value }}">{{ key }}</option>
+          {% endfor %}
+      {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6">
+          <button class="btn btn-primary btn-block" id="Generate_Chart5">
+            Generate Chart
+          </button>
+        </div>
+        <div class="col-6">
+          <button class="btn btn-primary btn-block" id="save_chart_5">
+            Save Charts
+          </button>
+        </div>
+      </div>
+      <canvas id="myChart5"></canvas>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col">
+          <h3 class="card-title">Chart #6</h3>
+        </div>
+      </div>
+      
+      <div class="row mb-2">
+        <div class="col">
+          <select class="form-control" id="exampleFormControlSelect6">
+            <option value="Profit & Loss" selected="">Profit & Loss</option>
+            <option value="Expenses">Expenses</option>
+            <option value="Operating Expenses">Operating Expenses</option>
+            <option value="Cost of Sold Goods">Cost of Sold Goods</option>
+            <option value="General and Administrative">
+              General and Administrative
+            </option>
+            <option value="Profit and Loss Ratio of Revenue">
+              Profit and Loss Ratio of Revenue
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="row mb-1">
+        <div class="col">
+          <select
+            class="custom-select"
+            multiple
+            id="exampleFormControlSelectMultiple6"
+          >
+          {% for i in P1 %}
+          {% for key,value in i.items %}
+              <option value="{{ value }}">{{ key }}</option>
+          {% endfor %}
+      {% endfor %}
+          </select>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-6">
+          <button class="btn btn-primary btn-block" id="Generate_Chart6">
+            Generate Chart
+          </button>
+        </div>
+        <div class="col-6">
+          <button class="btn btn-primary btn-block" id="save_chart_6">
+            Save Charts
+          </button>
+        </div>
+      </div>
+      <canvas id="myChart6"></canvas>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script>
+  $(document).ready(function () {
+      $("#save_chart_1, #save_chart_2, #save_chart_3, #save_chart_4, #save_chart_5, #save_chart_6").prop('disabled', true);
+    var labelsOptions = [];
+    var dataOPtions = [];
+    var backGroundColorsData = [];
+    var labelsOptions2 = [];
+    var dataOPtions2 = [];
+    var backGroundColorsData2 = [];
+    var labelsOptions3 = [];
+    var dataOPtions3 = [];
+    var backGroundColorsData3 = [];
+    var labelsOptions4 = [];
+    var dataOPtions4 = [];
+    var backGroundColorsData4 = [];
+    var labelsOptions5 = [];
+    var dataOPtions5 = [];
+    var backGroundColorsData5 = [];
+    var labelsOptions6 = [];
+    var dataOPtions6 = [];
+    var backGroundColorsData6 = [];
+
+    // Chart # 1
+    $("#Generate_Chart").on("click", function () {
+      labelsOptions = [];
+      dataOPtions = [];
+      backGroundColorsData = [];
+      $.each(
+        $("#exampleFormControlSelectMultiple1 option:selected"),
+        function () {
+          labelsOptions.push($(this).text());
+          dataOPtions.push($(this).val());
+          // backGroundColorsData.push("rgb(255, 99, " +  $(this).val() +  "132)");
+          backGroundColorsData.push("rgb(255, " +  parseInt((Math.random()*(255-0)+0)) +  ", " + parseInt((Math.random()*(255-0)+0)) + ")");
+        }
+      );
+      // console.log(backGroundColorsData);
+      if (labelsOptions.length >= 2) {
+          var total = 0;
+          for(var i=0; i < dataOPtions.length; i++)
+          {
+            if(dataOPtions[i] < 0 )
+            {
+                total +=  parseFloat(-1 * dataOPtions[i]);
+            }
+            else{
+                total +=  parseFloat(dataOPtions[i]);
+            } 
+          }
+          for(var i=0;i < dataOPtions.length;i++)
+          {
+              dataOPtions[i] =  (dataOPtions[i]/total *100).toFixed(2);
+          }
+        var ctx = document.getElementById("myChart").getContext("2d");
+        var chart = new Chart(ctx, {
+          // The type of chart we want to create
+          type: "pie",
+          // The data for our dataset
+          data: {
+            labels: labelsOptions,
+            datasets: [
+              {
+                label: "My First dataset",
+                // backgroundColor: "rgb(255, 99, 132)",
+                backgroundColor : backGroundColorsData,
+                // backgroundColor: colorize.bind(null, false, false),
+                hoverBackgroundColor: backGroundColorsData,
+                hoverBorderColor : backGroundColorsData,
+                // borderColor: "rgb(255, 99, 132)",
+                borderColor : backGroundColorsData,
+                data: dataOPtions,
+                // text : ["asdasd","asdsad"],
+                // labelTextColors : []
+                // title : ["asdas", "asdas"]
+              },
+            ],
+          },
+          // Configuration options go here
+          options: {
+      backgroundColor: "rgb(255, 99, 152)",
+          
+          
+          
+    },
+        });
+        // Enable Chart 1 Save Button
+        $("#save_chart_1").prop("disabled", false);
+      } else {
+                // Disable Chart 1 Save Button
+                $("#save_chart_1").prop("disabled", true);
+        alert(
+          "Please first specify atleast two fields for the required chart. Thanks!"
+        );
+      }
+    });
+    // Chart # 2
+    $("#Generate_Chart2").on("click", function () {
+      labelsOptions2 = [];
+      dataOPtions2 = [];
+      backGroundColorsData2 = [];
+      $.each(
+        $("#exampleFormControlSelectMultiple2 option:selected"),
+        function () {
+          labelsOptions2.push($(this).text());
+          dataOPtions2.push($(this).val());
+          // backGroundColorsData.push("rgb(255, 99, " +  $(this).val() +  "132)");
+          backGroundColorsData2.push("rgb(255, " +  parseInt((Math.random()*(255-0)+0)) +  ", " + parseInt((Math.random()*(255-0)+0)) + ")");
+        }
+      );
+      if (labelsOptions2.length >= 2) {
+        var total = 0;
+          for(var i=0; i < dataOPtions2.length; i++)
+          {
+            if(dataOPtions2[i] < 0 )
+            {
+                total +=  parseFloat(-1 * dataOPtions2[i]);
+            }
+            else{
+                total +=  parseFloat(dataOPtions2[i]);
+            } 
+          }
+          for(var i=0;i < dataOPtions2.length;i++)
+          {
+              dataOPtions2[i] =  (dataOPtions2[i]/total *100).toFixed(2);
+          }
+        var ctx = document.getElementById("myChart2").getContext("2d");
+        var chart = new Chart(ctx, {
+          // The type of chart we want to create
+          type: "pie",
+          // The data for our dataset
+          data: {
+            labels: labelsOptions2,
+            datasets: [
+              {
+                label: "My First dataset",
+                // backgroundColor: "rgb(255, 99, 132)",
+                // borderColor: "rgb(255, 99, 132)",
+                backgroundColor : backGroundColorsData2,
+                // backgroundColor: colorize.bind(null, false, false),
+                hoverBackgroundColor: backGroundColorsData2,
+                hoverBorderColor : backGroundColorsData2,
+                // borderColor: "rgb(255, 99, 132)",
+                borderColor : backGroundColorsData2,
+                data: dataOPtions2,
+              },
+            ],
+          },
+          // Configuration options go here
+          options: {
+      backgroundColor: "rgb(255, 99, 152)",
+          
+          
+          
+    },
+        });
+        // Enable Chart 2 Save Button
+        $("#save_chart_2").prop("disabled", false);
+      } else {
+        // Disable Chart 2 Save Button
+        $("#save_chart_2").prop("disabled", true);
+        alert(
+          "Please first specify atleast two fields for the required chart. Thanks!"
+        );
+      }
+    });
+    // Chart # 3
+    $("#Generate_Chart3").on("click", function () {
+      labelsOptions3 = [];
+      dataOPtions3 = [];
+      backGroundColorsData3 = [];
+      $.each(
+        $("#exampleFormControlSelectMultiple3 option:selected"),
+        function () {
+          labelsOptions3.push($(this).text());
+          dataOPtions3.push($(this).val());
+          // backGroundColorsData.push("rgb(255, 99, " +  $(this).val() +  "132)");
+          backGroundColorsData3.push("rgb(255, " +  parseInt((Math.random()*(255-0)+0)) +  ", " + parseInt((Math.random()*(255-0)+0)) + ")");
+        }
+      );
+      if (labelsOptions3.length >= 2) {
+        var total = 0;
+          for(var i=0; i < dataOPtions3.length; i++)
+          {
+            if(dataOPtions3[i] < 0 )
+            {
+                total +=  parseFloat(-1 * dataOPtions3[i]);
+            }
+            else{
+                total +=  parseFloat(dataOPtions3[i]);
+            } 
+          }
+          for(var i=0;i < dataOPtions3.length;i++)
+          {
+              dataOPtions3[i] =  (dataOPtions3[i]/total *100).toFixed(2);
+          }
+        var ctx = document.getElementById("myChart3").getContext("2d");
+        var chart = new Chart(ctx, {
+          // The type of chart we want to create
+          type: "pie",
+          // The data for our dataset
+          data: {
+            labels: labelsOptions3,
+            datasets: [
+              {
+                label: "My First dataset",
+                // backgroundColor: "rgb(255, 99, 132)",
+                // borderColor: "rgb(255, 99, 132)",
+                backgroundColor : backGroundColorsData3,
+                // backgroundColor: colorize.bind(null, false, false),
+                hoverBackgroundColor: backGroundColorsData3,
+                hoverBorderColor : backGroundColorsData3,
+                // borderColor: "rgb(255, 99, 132)",
+                borderColor : backGroundColorsData3,
+                data: dataOPtions3,
+              },
+            ],
+          },
+          // Configuration options go here
+          options: {
+      backgroundColor: "rgb(255, 99, 152)",
+          
+          
+          
+    },
+        });
+        // Enable Chart 3 Save Button
+        $("#save_chart_3").prop("disabled", false);
+      } else {
+        // Disable Chart 3 Save Button
+        $("#save_chart_3").prop("disabled", true);
+        alert(
+          "Please first specify atleast two fields for the required chart. Thanks!"
+        );
+      }
+    });
+    // Chart # 4
+    $("#Generate_Chart4").on("click", function () {
+      labelsOptions4 = [];
+      dataOPtions4 = [];
+      backGroundColorsData = [];
+      $.each(
+        $("#exampleFormControlSelectMultiple4 option:selected"),
+        function () {
+          labelsOptions4.push($(this).text());
+          dataOPtions4.push($(this).val());
+          // backGroundColorsData.push("rgb(255, 99, " +  $(this).val() +  "132)");
+          backGroundColorsData4.push("rgb(255, " +  parseInt((Math.random()*(255-0)+0)) +  ", " + parseInt((Math.random()*(255-0)+0)) + ")");
+        }
+      );
+      if (labelsOptions4.length >= 2) {
+        var total = 0;
+          for(var i=0; i < dataOPtions4.length; i++)
+          {
+            if(dataOPtions4[i] < 0 )
+            {
+                total +=  parseFloat(-1 * dataOPtions4[i]);
+            }
+            else{
+                total +=  parseFloat(dataOPtions4[i]);
+            } 
+          }
+          for(var i=0;i < dataOPtions4.length;i++)
+          {
+              dataOPtions4[i] =  (dataOPtions4[i]/total *100).toFixed(2);
+          }
+        var ctx = document.getElementById("myChart4").getContext("2d");
+        var chart = new Chart(ctx, {
+          // The type of chart we want to create
+          type: "pie",
+          // The data for our dataset
+          data: {
+            labels: labelsOptions4,
+            datasets: [
+              {
+                label: "My First dataset",
+                // backgroundColor: "rgb(255, 99, 132)",
+                // borderColor: "rgb(255, 99, 132)",
+                backgroundColor : backGroundColorsData4,
+                // backgroundColor: colorize.bind(null, false, false),
+                hoverBackgroundColor: backGroundColorsData4,
+                hoverBorderColor : backGroundColorsData4,
+                // borderColor: "rgb(255, 99, 132)",
+                borderColor : backGroundColorsData4,
+                data: dataOPtions4,
+              },
+            ],
+          },
+          // Configuration options go here
+          options: {
+      backgroundColor: "rgb(255, 99, 152)",
+          
+          
+          
+    },
+        });
+        // Enable Chart 4 Save Button
+        $("#save_chart_4").prop("disabled", false);
+      } else {
+                // Disable Chart 4 Save Button
+                $("#save_chart_4").prop("disabled", true);
+        alert(
+          "Please first specify atleast two fields for the required chart. Thanks!"
+        );
+      }
+    });
+    // Chart # 5
+    $("#Generate_Chart5").on("click", function () {
+      labelsOptions5 = [];
+      dataOPtions5 = [];
+      backGroundColorsData5 = [];
+      $.each(
+        $("#exampleFormControlSelectMultiple5 option:selected"),
+        function () {
+          labelsOptions5.push($(this).text());
+          dataOPtions5.push($(this).val());
+          // backGroundColorsData.push("rgb(255, 99, " +  $(this).val() +  "132)");
+          backGroundColorsData5.push("rgb(255, " +  parseInt((Math.random()*(255-0)+0)) +  ", " + parseInt((Math.random()*(255-0)+0)) + ")");
+        }
+      );
+      if (labelsOptions5.length >= 2) {
+        var total = 0;
+          for(var i=0; i < dataOPtions5.length; i++)
+          {
+            if(dataOPtions5[i] < 0 )
+            {
+                total +=  parseFloat(-1 * dataOPtions5[i]);
+            }
+            else{
+                total +=  parseFloat(dataOPtions5[i]);
+            } 
+          }
+          for(var i=0;i < dataOPtions5.length;i++)
+          {
+              dataOPtions5[i] =  (dataOPtions5[i]/total *100).toFixed(2);
+          }
+        var ctx5 = document.getElementById("myChart5").getContext("2d");
+      // chart.update();
+        var chart5 = new Chart(ctx5, {
+          // The type of chart we want to create
+          type: "pie",
+          // The data for our dataset
+          data: {
+            labels: labelsOptions5,
+            datasets: [
+              {
+                label: "My First dataset",
+                // backgroundColor: "rgb(255, 99, 132)",
+                // borderColor: backGroundColorsData,
+                backgroundColor : backGroundColorsData5,
+                // backgroundColor: colorize.bind(null, false, false),
+                hoverBackgroundColor: backGroundColorsData5,
+                hoverBorderColor : backGroundColorsData5,
+                // borderColor: "rgb(255, 99, 132)",
+                borderColor : backGroundColorsData5,
+                data: dataOPtions5,
+              },
+            ],
+          },
+          // Configuration options go here
+          options: {
+      backgroundColor: "rgb(255, 99, 152)",
+          
+          
+          
+    },
+        });
+        // Enable Chart 5 Save Button
+        $("#save_chart_5").prop("disabled", false);
+      } else {
+
+        // Disable Chart 5 Save Button
+        $("#save_chart_5").prop("disabled", true);
+        alert(
+          "Please first specify atleast two fields for the required chart. Thanks!"
+        );
+      }
+    });
+    // Chart # 6
+    $("#Generate_Chart6").on("click", function () {
+      labelsOptions6 = [];
+      dataOPtions6 = [];
+      backGroundColorsData6 = [];
+      $.each(
+        $("#exampleFormControlSelectMultiple6 option:selected"),
+        function () {
+          labelsOptions6.push($(this).text());
+          dataOPtions6.push($(this).val());
+          backGroundColorsData6.push("rgb(255, " +  parseInt((Math.random()*(255-0)+0)) +  ", " + parseInt((Math.random()*(255-0)+0)) + ")");
+        }
+      );
+      if (labelsOptions6.length >= 2) {
+        var total = 0;
+          for(var i=0; i < dataOPtions6.length; i++)
+          {
+            if(dataOPtions6[i] < 0 )
+            {
+                total +=  parseFloat(-1 * dataOPtions6[i]);
+            }
+            else{
+                total +=  parseFloat(dataOPtions6[i]);
+            } 
+          }
+          for(var i=0;i < dataOPtions6.length;i++)
+          {
+              dataOPtions6[i] =  (dataOPtions6[i]/total *100).toFixed(2);
+          }
+        var ctx = document.getElementById("myChart6").getContext("2d");
+        var chart = new Chart(ctx, {
+          // The type of chart we want to create
+          type: "pie",
+          // The data for our dataset
+          data: {
+            labels: labelsOptions6,
+            datasets: [
+              {
+                label: "My First dataset",
+                backgroundColor : backGroundColorsData6,
+                hoverBackgroundColor: backGroundColorsData6,
+                hoverBorderColor : backGroundColorsData6,
+                borderColor : backGroundColorsData6,
+                data: dataOPtions6,
+              },
+            ],
+          },
+          // Configuration options go here
+          options: {
+      backgroundColor: "rgb(255, 99, 152)",
+          
+          
+          
+    },
+        });
+
+        // Enable Chart 6 Save Button
+        $("#save_chart_6").prop("disabled", false);
+      } else {
+                // Disable Chart 6 Save Button
+                $("#save_chart_6").prop("disabled", true);
+        alert(
+          "Please first specify atleast two fields for the required chart. Thanks!"
+        );
+      }
+    });
+
+    // Save Generated Chart 1
+    $("#save_chart_1").on("click", function(){
+      $.ajax({
+        type : 'POST',
+        url:  "{% url 'Save_Report_Chart' report.client.id report.id %}",
+        data : {
+          'labels' : JSON.stringify(labelsOptions) ,
+          'dataValues' : JSON.stringify(dataOPtions), 
+          'csrfmiddlewaretoken': '{{ csrf_token }}', 
+          'chart-type' : $("#exampleFormControlSelect1 option:selected").val(),
+          'chart' : 1,
+          
+        },
+        dataType: 'JSON',
+        success : function(response){
+          
+          // Disabled Chart 1 Save Button, Chart 1 Type Select Field, Chart 1 Generate Button, Chart 1 Fields
+          $("#save_chart_1, #exampleFormControlSelect1, #Generate_Chart, #exampleFormControlSelectMultiple1").prop("disabled", true);
+
+          $("#exampleModal1").modal("show");
+
+        },
+        error : function(response){
+          // Enable Chart 1 Save Button, Chart 1 Type Select Field, Chart 1 Generate Button, Chart 1 Fields
+          $("#save_chart_1, #exampleFormControlSelect1, #Generate_Chart, #exampleFormControlSelectMultiple1").prop("disabled", false);
+        }
+      });
+    });
+
+    
+    // Save Generated Chart 2
+    $("#save_chart_2").on("click", function(){
+      $.ajax({
+        type : 'POST',
+        url:  "{% url 'Save_Report_Chart' report.client.id report.id %}",
+        data : {
+          'labels' : JSON.stringify(labelsOptions2) ,
+          'dataValues' : JSON.stringify(dataOPtions2), 
+          'csrfmiddlewaretoken': '{{ csrf_token }}', 
+          'chart-type' : $("#exampleFormControlSelect2 option:selected").val(),
+          'chart' : 2
+        },
+        dataType: 'JSON',
+        success : function(response){
+                    // Disabled Chart 2 Save Button, Chart 2  Type Select Field, Chart 2 Generate Button, Chart 2 Fields
+                    $("#save_chart_2, #exampleFormControlSelect2, #Generate_Chart2, #exampleFormControlSelectMultiple2").prop("disabled", true);
+
+                    $("#exampleModal2").modal("show");
+        },
+        error : function(response){
+                              // Enable Chart 2 Save Button, Chart 2  Type Select Field, Chart 2 Generate Button, Chart 2 Fields
+                              $("#save_chart_2, #exampleFormControlSelect2, #Generate_Chart2, #exampleFormControlSelectMultiple2").prop("disabled", false);
+        }
+      });
+    });
+  
+    
+    // Save Generated Chart 3
+    $("#save_chart_3").on("click", function(){
+      $.ajax({
+        type : 'POST',
+        url:  "{% url 'Save_Report_Chart' report.client.id report.id %}",
+        data : {
+          'labels' : JSON.stringify(labelsOptions3) ,
+          'dataValues' : JSON.stringify(dataOPtions3), 
+          'csrfmiddlewaretoken': '{{ csrf_token }}', 
+          'chart-type' : $("#exampleFormControlSelect3 option:selected").val(),
+          'chart' : 3
+        },
+        dataType: 'JSON',
+        success : function(response){
+                    // Disabled Chart 3 Save Button, Chart 2 Type Select Field, Chart 3 Generate Button, Chart 3 Fields
+                    $("#save_chart_3, #exampleFormControlSelect3, #Generate_Chart3, #exampleFormControlSelectMultiple3").prop("disabled", true);
+
+                    $("#exampleModal3").modal("show");
+        },
+        error : function(response){
+                    // Enable Chart 3 Save Button, Chart 2 Type Select Field, Chart 3 Generate Button, Chart 3 Fields
+                    $("#save_chart_3, #exampleFormControlSelect3, #Generate_Chart3, #exampleFormControlSelectMultiple3").prop("disabled", false);
+        }
+      });
+    });
+  
+
+    // Save Generated Chart 4
+    $("#save_chart_4").on("click", function(){
+      $.ajax({
+        type : 'POST',
+        url:  "{% url 'Save_Report_Chart' report.client.id report.id %}",
+        data : {
+          'labels' : JSON.stringify(labelsOptions4) ,
+          'dataValues' : JSON.stringify(dataOPtions4), 
+          'csrfmiddlewaretoken': '{{ csrf_token }}', 
+          'chart-type' : $("#exampleFormControlSelect4 option:selected").val(),
+          'chart' : 4
+        },
+        dataType: 'JSON',
+        success : function(response){
+                    // Disabled Chart 4 Save Button, Chart 4 Type Select Field, Chart 4 Generate Button, Chart 4 Fields
+                    $("#save_chart_4, #exampleFormControlSelect4, #Generate_Chart4, #exampleFormControlSelectMultiple4").prop("disabled", true);
+                    $("#exampleModal4").modal("show");
+        },
+        error : function(response){
+                              // Enable Chart 4 Save Button, Chart 4 Type Select Field, Chart 4 Generate Button, Chart 4 Fields
+                              $("#save_chart_4, #exampleFormControlSelect4, #Generate_Chart4, #exampleFormControlSelectMultiple4").prop("disabled", false);
+        }
+      });
+    });
+  
+    
+    // Save Generated Chart 5
+    $("#save_chart_5").on("click", function(){
+      $.ajax({
+        type : 'POST',
+        url:  "{% url 'Save_Report_Chart' report.client.id report.id %}",
+        data : {
+          'labels' : JSON.stringify(labelsOptions5) ,
+          'dataValues' : JSON.stringify(dataOPtions5), 
+          'csrfmiddlewaretoken': '{{ csrf_token }}', 
+          'chart-type' : $("#exampleFormControlSelect5 option:selected").val(),
+          'chart' : 5
+        },
+        dataType: 'JSON',
+        success : function(response){
+                              // Disabled Chart 5 Save Button, Chart 5 Type Select Field, Chart 5 Generate Button, Chart 5 Fields
+                              $("#save_chart_5, #exampleFormControlSelect5, #Generate_Chart5, #exampleFormControlSelectMultiple5").prop("disabled", true);
+
+                              $("#exampleModal5").modal("show");
+        },
+        error : function(response){
+                                        // Enable Chart 5 Save Button, Chart 5 Type Select Field, Chart 5 Generate Button, Chart 5 Fields
+                                        $("#save_chart_5, #exampleFormControlSelect5, #Generate_Chart5, #exampleFormControlSelectMultiple5").prop("disabled", false);
+        }
+      });
+    });
+  
+    
+    // Save Generated Chart 6
+    $("#save_chart_6").on("click", function(){
+      $.ajax({
+        type : 'POST',
+        url:  "{% url 'Save_Report_Chart' report.client.id report.id %}",
+        data : {
+          'labels' : JSON.stringify(labelsOptions6) ,
+          'dataValues' : JSON.stringify(dataOPtions6), 
+          'csrfmiddlewaretoken': '{{ csrf_token }}', 
+          'chart-type' : $("#exampleFormControlSelect6 option:selected").val(),
+          'chart' : 6
+        },
+        dataType: 'JSON',
+        success : function(response){
+                              // Disabled Chart 6 Save Button, Chart 6 Type Select Field, Chart 6 Generate Button, Chart 6 Fields
+                              $("#save_chart_6, #exampleFormControlSelect6, #Generate_Chart6, #exampleFormControlSelectMultiple6").prop("disabled", true);
+
+                              $("#exampleModal6").modal('show');
+        },
+        error : function(response){
+                                        // Enable Chart 6 Save Button, Chart 6 Type Select Field, Chart 6 Generate Button, Chart 6 Fields
+                                        $("#save_chart_6, #exampleFormControlSelect6, #Generate_Chart6, #exampleFormControlSelectMultiple6").prop("disabled", false);
+        }
+      });
+    });
+  
+    // If Chart 1 is saved
+    if('{{ report.is_saved_chart_1 }}' == "True"){
+      var backGroundColorsData1 = [];
+      // Disabled Chart 1 Save Button, Chart 1 Type Select Field, Chart 1 Generate Button, Chart 1 Fields
+      $("#save_chart_1, #Generate_Chart, #exampleFormControlSelect1, #exampleFormControlSelectMultiple1").prop("disabled", true);
+      // Select Chart Fields
+      $('#exampleFormControlSelect1 option[value="{{ report.chart_1_type }}"]').attr('selected','selected');
+      $.each('{{ report.chartLabel_1 }}'.replace(/&quot;/g,'"').replace('[', '').replace(']','').replace(/"/g, "").split(","), function(i,e){ 
+        $("#exampleFormControlSelectMultiple1 > option").each(function() {
+        if(this.text ==e){
+          $(this).attr("selected", "selected");
+        } 
+        });
+        backGroundColorsData1.push("rgb(255, " +  parseInt((Math.random()*(255-0)+0)) +  ", " + parseInt((Math.random()*(255-0)+0)) + ")");
+      });
+
+      // Show Chart 1 
+      var ctx = document.getElementById("myChart").getContext("2d");
+      
+      
+      var chart = new Chart(ctx, {
+          type: "pie",
+          data: {
+            labels: '{{ report.chartLabel_1 }}'.replace(/&quot;/g,'"').replace('[', '').replace(']','').replace(/"/g, "").split(","),
+            datasets: [
+              {
+                label: "My First dataset",
+                backgroundColor : backGroundColorsData1,
+                hoverBackgroundColor: backGroundColorsData1,
+                hoverBorderColor : backGroundColorsData1,
+                borderColor : backGroundColorsData1,
+                data: '{{ report.chartData_1 }}'.replace(/&quot;/g,'"').replace('[', '').replace(']','').replace(/"/g, "").split(","),
+              },
+            ],
+          },
+          options: {
+      backgroundColor: "rgb(255, 99, 152)",
+    },
+        });
+        
+  }
+    
+    // If chart 2 is saved
+    if('{{ report.is_saved_chart_2 }}' == "True"){
+      var backGroundColorsData2 = [];
+      // Disabled Chart 2 Save Button, Chart 2 Type Select Field, Chart 2 Generate Button, Chart 2 Fields
+      $("#save_chart_2, #Generate_Chart2, #exampleFormControlSelect2, #exampleFormControlSelectMultiple2").prop("disabled", true);
+      // Select Chart Fields
+      $('#exampleFormControlSelect2 option[value="{{ report.chart_2_type }}"]').attr('selected','selected');
+      $.each('{{ report.chartLabel_2 }}'.replace(/&quot;/g,'"').replace('[', '').replace(']','').replace(/"/g, "").split(","), function(i,e){ 
+        $("#exampleFormControlSelectMultiple2 > option").each(function() {
+        if(this.text ==e){
+          $(this).attr("selected", "selected");
+        } 
+        });
+        backGroundColorsData2.push("rgb(255, " +  parseInt((Math.random()*(255-0)+0)) +  ", " + parseInt((Math.random()*(255-0)+0)) + ")");
+      });
+
+      // Show Chart 2 
+      var ctx = document.getElementById("myChart2").getContext("2d");
+      var chart = new Chart(ctx, {
+          type: "pie",
+          data: {
+            labels: '{{ report.chartLabel_2 }}'.replace(/&quot;/g,'"').replace('[', '').replace(']','').replace(/"/g, "").split(","),
+            datasets: [
+              {
+                label: "My First dataset",
+                backgroundColor : backGroundColorsData2,
+                hoverBackgroundColor: backGroundColorsData2,
+                hoverBorderColor : backGroundColorsData2,
+                borderColor : backGroundColorsData2,
+                data: '{{ report.chartData_2 }}'.replace(/&quot;/g,'"').replace('[', '').replace(']','').replace(/"/g, "").split(","),
+              },
+            ],
+          },
+          options: {
+      backgroundColor: "rgb(255, 99, 152)",
+    },
+        });
+        
+  }
+    
+    
+    // If chart 3 is saved
+    if('{{ report.is_saved_chart_3 }}' == "True"){
+      var backGroundColorsData3 = [];
+        // Disabled Chart 3 Save Button, Chart 3 Type Select Field, Chart 3 Generate Button, Chart 3 Fields
+        $("#save_chart_3, #Generate_Chart3, #exampleFormControlSelect3, #exampleFormControlSelectMultiple3").prop("disabled", true);
+        // Select Chart Fields
+        $('#exampleFormControlSelect3 option[value="{{ report.chart_3_type }}"]').attr('selected','selected');
+        $.each('{{ report.chartLabel_3 }}'.replace(/&quot;/g,'"').replace('[', '').replace(']','').replace(/"/g, "").split(","), function(i,e){ 
+          $("#exampleFormControlSelectMultiple3 > option").each(function() {
+          if(this.text ==e){
+            $(this).attr("selected", "selected");
+          } 
+          });
+          backGroundColorsData3.push("rgb(255, " +  parseInt((Math.random()*(255-0)+0)) +  ", " + parseInt((Math.random()*(255-0)+0)) + ")");
+        });
+
+        // Show Chart 3
+        var ctx = document.getElementById("myChart3").getContext("2d");
+        
+        
+        var chart = new Chart(ctx, {
+            type: "pie",
+            data: {
+              labels: '{{ report.chartLabel_3 }}'.replace(/&quot;/g,'"').replace('[', '').replace(']','').replace(/"/g, "").split(","),
+              datasets: [
+                {
+                  label: "My First dataset",
+                  backgroundColor : backGroundColorsData3,
+                  hoverBackgroundColor: backGroundColorsData3,
+                  hoverBorderColor : backGroundColorsData3,
+                  borderColor : backGroundColorsData3,
+                  data: '{{ report.chartData_3 }}'.replace(/&quot;/g,'"').replace('[', '').replace(']','').replace(/"/g, "").split(","),
+                },
+              ],
+            },
+            options: {
+        backgroundColor: "rgb(255, 99, 152)",
+      },
+          });
+          
+    }
+      
+    // If chart 4 is saved
+    if('{{ report.is_saved_chart_4 }}' == "True"){
+      var backGroundColorsData4 = [];
+        // Disabled Chart 4 Save Button, Chart 4 Type Select Field, Chart 4 Generate Button, Chart 4 Fields
+        $("#save_chart_4, #Generate_Chart4, #exampleFormControlSelect4, #exampleFormControlSelectMultiple4").prop("disabled", true);
+        // Select Chart Fields
+        $('#exampleFormControlSelect4 option[value="{{ report.chart_4_type }}"]').attr('selected','selected');
+        $.each('{{ report.chartLabel_4 }}'.replace(/&quot;/g,'"').replace('[', '').replace(']','').replace(/"/g, "").split(","), function(i,e){ 
+          $("#exampleFormControlSelectMultiple4 > option").each(function() {
+          if(this.text ==e){
+            $(this).attr("selected", "selected");
+          } 
+          });
+          backGroundColorsData4.push("rgb(255, " +  parseInt((Math.random()*(255-0)+0)) +  ", " + parseInt((Math.random()*(255-0)+0)) + ")");
+        });
+
+        // Show Chart 4
+        var ctx = document.getElementById("myChart4").getContext("2d");
+        var chart = new Chart(ctx, {
+            type: "pie",
+            data: {
+              labels: '{{ report.chartLabel_4 }}'.replace(/&quot;/g,'"').replace('[', '').replace(']','').replace(/"/g, "").split(","),
+              datasets: [
+                {
+                  label: "My First dataset",
+                  backgroundColor : backGroundColorsData4,
+                  hoverBackgroundColor: backGroundColorsData4,
+                  hoverBorderColor : backGroundColorsData4,
+                  borderColor : backGroundColorsData4,
+                  data: '{{ report.chartData_4 }}'.replace(/&quot;/g,'"').replace('[', '').replace(']','').replace(/"/g, "").split(","),
+                },
+              ],
+            },
+            options: {
+        backgroundColor: "rgb(255, 99, 152)",
+      },
+          });
+          
+    }
+    
+    // If chart 5 is saved
+    if('{{ report.is_saved_chart_5 }}' == "True"){
+      var backGroundColorsData5 = [];
+        // Disabled Chart 5 Save Button, Chart 5 Type Select Field, Chart 5 Generate Button, Chart 5 Fields
+        $("#save_chart_5, #Generate_Chart5, #exampleFormControlSelect5, #exampleFormControlSelectMultiple5").prop("disabled", true);
+        // Select Chart Fields
+        $('#exampleFormControlSelect5 option[value="{{ report.chart_5_type }}"]').attr('selected','selected');
+        $.each('{{ report.chartLabel_5 }}'.replace(/&quot;/g,'"').replace('[', '').replace(']','').replace(/"/g, "").split(","), function(i,e){ 
+          $("#exampleFormControlSelectMultiple5 > option").each(function() {
+          if(this.text ==e){
+            $(this).attr("selected", "selected");
+          } 
+          });
+          backGroundColorsData5.push("rgb(255, " +  parseInt((Math.random()*(255-0)+0)) +  ", " + parseInt((Math.random()*(255-0)+0)) + ")");
+        });
+
+        // Show Chart 5
+        var ctx = document.getElementById("myChart5").getContext("2d");
+        var chart = new Chart(ctx, {
+            type: "pie",
+            data: {
+              labels: '{{ report.chartLabel_5 }}'.replace(/&quot;/g,'"').replace('[', '').replace(']','').replace(/"/g, "").split(","),
+              datasets: [
+                {
+                  label: "My First dataset",
+                  backgroundColor : backGroundColorsData5,
+                  hoverBackgroundColor: backGroundColorsData5,
+                  hoverBorderColor : backGroundColorsData5,
+                  borderColor : backGroundColorsData5,
+                  data: '{{ report.chartData_5 }}'.replace(/&quot;/g,'"').replace('[', '').replace(']','').replace(/"/g, "").split(","),
+                },
+              ],
+            },
+            options: {
+        backgroundColor: "rgb(255, 99, 152)",
+      },
+          });
+          
+    }
+    
+
+    // If chart 6 is saved
+    if('{{ report.is_saved_chart_6 }}' == "True"){
+      var backGroundColorsData6 = [];
+        // Disabled Chart 6 Save Button, Chart 6 Type Select Field, Chart 6 Generate Button, Chart 6 Fields
+        $("#save_chart_6, #Generate_Chart6, #exampleFormControlSelect6, #exampleFormControlSelectMultiple6").prop("disabled", true);
+
+        // Select Chart Fields
+        $('#exampleFormControlSelect6 option[value="{{ report.chart_6_type }}"]').attr('selected','selected');
+        $.each('{{ report.chartLabel_6 }}'.replace(/&quot;/g,'"').replace('[', '').replace(']','').replace(/"/g, "").split(","), function(i,e){ 
+          $("#exampleFormControlSelectMultiple6 > option").each(function() {
+          if(this.text ==e){
+            $(this).attr("selected", "selected");
+          } 
+          });
+          backGroundColorsData6.push("rgb(255, " +  parseInt((Math.random()*(255-0)+0)) +  ", " + parseInt((Math.random()*(255-0)+0)) + ")");
+        });
+
+        // Show Chart 5
+        var ctx = document.getElementById("myChart6").getContext("2d");
+        var chart = new Chart(ctx, {
+            type: "pie",
+            data: {
+              labels: '{{ report.chartLabel_6 }}'.replace(/&quot;/g,'"').replace('[', '').replace(']','').replace(/"/g, "").split(","),
+              datasets: [
+                {
+                  label: "My First dataset",
+                  backgroundColor : backGroundColorsData6,
+                  hoverBackgroundColor: backGroundColorsData6,
+                  hoverBorderColor : backGroundColorsData6,
+                  borderColor : backGroundColorsData6,
+                  data: '{{ report.chartData_6 }}'.replace(/&quot;/g,'"').replace('[', '').replace(']','').replace(/"/g, "").split(","),
+                },
+              ],
+            },
+            options: {
+        backgroundColor: "rgb(255, 99, 152)",
+      },
+          });
+          
+    }
+    
+
+
+  });
+  
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends 'webaccount/base_rm.html' %}
+{% load static flipCols row_exists %}
+{% block title %}Report # {{ report.id }}{% endblock %}
+{% block content %}
+<div class="mx-auto w-600 mt-5">
+    <div class="card shadow border-0 wr-55 mb-4">
+        <div class="card-header bg-transparent border-0">
+            <h3 class="card-title text-left text-primary">
+                Report ID Number #{{ report.id }} , Type : {{ report.reportType }}
+            </h3>
+            <h5><a href="{% url 'Client_Reports_URL' client.id %}">Back to report list</a>
+            </h5>
+            <div class="col-12 text-right">
+                {% if report.status == "Confirmed" %}
+                    <h4><a href="{% url 'Report_Charts' report.client.id report.id %}">Charts</a></h4>  
+                    <h3 class="text-muted">Confirmed</h3>
+                    <h3 class="text-muted">Update report</h3>
+                  
+                  {%  else %}
+                  {% include "webaccount/report_confirmation_modal.html" %}
+                  <h3 class="text-muted">Charts</h3>
+                  <h4><a href="{% url 'Reports_List_Add_URL' client.id %}" data-toggle="modal" data-target="#exampleModal" >
+                  Confirm Report
+                </a></h4>
+                {% endif %}
+              </div>
+              {% if report.status != "Confirmed" %}
+              <div class="col-12 text-right">
+                <h4><a href="{% url 'Reports_List_Update_URL' report.id %}">Update Report</a></h4>
+                
+              </div>
+              {% endif %}
+        </div>
+        <div  class="card-body">
+            <table class="table table-striped table-bordered">
+                
+                <tbody>
+                    
+                {% for row in obj %}
+                <tr>
+                    {% for col in row %}
+                    
+                        {% if col.value %}
+                            <td>
+                                {{ col.value }}
+                            </td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            
+                {% endfor %}
+            
+               
+                </tbody>
+            </table>
+            
+        </div >
+    </div>
+</div>
+
+{% endblock %}

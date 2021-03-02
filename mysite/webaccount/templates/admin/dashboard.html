@@ -1,0 +1,565 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script src="https://cdn.jsdelivr.net/gh/emn178/chartjs-plugin-labels/src/chartjs-plugin-labels.js"></script>
+
+
+<style>
+    .w-800{
+        width: 800px  !important;
+    }
+    .w-900{
+        width: 900px  !important;
+    }
+</style>
+
+<div class="ml-auto w-900 mt-2 ">
+    <div class="card border-0 ">
+        <div class="card-header bg-transparent border-0">
+            <h1 class="card-title">
+                Dashboard
+            </h1>
+        </div>
+        <div class="card-body">
+            <form action="{% url 'ADMIN_DASHBOARD_URL' %}" method="GET">
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">Client By Service</label>
+                    <select class="form-control" id="exampleFormControlSelect1" name="SERVICES" >
+                        <option value="All" {% if filter_parameter == "All" %} selected=""{% endif %} >All</option>
+                        <option value="VAT" {% if filter_parameter == "VAT" %} selected=""{% endif %}>VAT</option>
+                      <option value="BookKeeping" {% if filter_parameter == "BookKeeping" %} selected=""{% endif %}>BookKeeping</option>
+                      
+                    </select>
+                  </div>
+            </form>
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Client ID</th>
+                    <th scope="col">Client Name</th>
+                    <th scope="col">Paid Amount</th>
+                    <th scope="col">Unpaid Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for client in Clients_Objects %}
+                        <tr>
+                            <td>
+                                {{ client.id }}
+                            </td>
+                            <td>
+                                {{ client.Name }}
+                            </td>
+                            <td>
+                                ${{  client.package_price }}
+                            </td>
+                            <td>
+                                {{ None }}
+                            </td>
+                        </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+
+              <h1 class="card-title">
+                  Sectors
+              </h1>
+
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Sector ID</th>
+                    <th scope="col">Sector Name</th>
+                    <th scope="col">Paid Amount</th>
+                    <th scope="col">Unpaid Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {%  for sector  in sector_objects %}
+                    <tr>
+                        <td>
+                            {{ sector.id }}
+                        </td>
+                        <td>
+                            {{ sector.Name }}
+                        </td>
+                        <td>
+                            ${{ sector.get_paid_amount }}
+                        </td>
+                        <td>
+                            {{ None }}
+                        </td>
+                    </tr>
+                  {% endfor  %}
+                </tbody>
+              </table>
+
+            <div class="container">
+                <div class="row">
+                    <h1 class="card-title">
+                        Pie Charts Sector Paid Amount
+                    </h1>
+                </div>
+                <div class="row">
+                    <div class="col">
+                    <canvas id="myChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="row">
+                    <h1 class="card-title">
+                        Each Service Paid Amount
+                    </h1>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <table class="table">
+                            <thead>
+                              <tr>
+                                <th scope="col">Service</th>
+                                <th scope="col">Paid Amount</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                  <td>
+                                      VAT
+                                  </td>
+                                  <td>
+                                      ${{ vat_amount }}
+                                  </td>
+                              </tr>
+                              <tr>
+                                <td>
+                                    Book Keeping
+                                </td>
+                                <td>
+                                    ${{ book_amount }}
+                                </td>
+                            </tr>
+                            </tbody>
+                          </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="row">
+                    <h1 class="card-title">
+                        Each Service Paid Amount Pie Chart
+                    </h1>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <canvas id="myChart2"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container mt-5  bg-light">
+                <div class="row">
+                    <h1 class="card-title">
+                        Total unpaid Amount :   ${{ 2000 }}
+                    </h1>
+                </div>
+            </div>
+
+            <div class="container mt-5">
+                <div class="row">
+                    <h1 class="card-title">
+                        Client By Status Pie Chart
+                    </h1>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <canvas id="myChart3"></canvas>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="container my-4">
+                    <div class="row">
+                        <h1 class="card-title">
+                            Client Statistics (By Status)
+                        </h1>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Number of Clients</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            New
+                                        </td>
+                                        <td>
+                                            {{ New_Client_Personal_Info_Objects_counts }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Active
+                                        </td>
+                                        <td>
+                                            {{ Active_Client_Personal_Info_Objects_counts }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Pending
+                                        </td>
+                                        <td>
+                                            {{ Pending_Client_Personal_Info_Objects_counts }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Completed
+                                        </td>
+                                        <td>
+                                            {{ Completed_Client_Personal_Info_Objects_counts }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Disabled
+                                        </td>
+                                        <td>
+                                            {{ Disabled_Client_Personal_Info_Objects_counts }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                              </table>
+                        </div>
+                    </div>
+            </div>
+
+
+
+            <div class="container my-4">
+                <div class="row">
+                    <h1 class="card-title">
+                        Invoice By Status Pie Chart
+                    </h1>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <canvas id="myChart4"></canvas>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="container my-4">
+                <div class="row">
+                    <h1 class="card-title">
+                        Invoice Statistics (By Status)
+                    </h1>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <table class="table">
+                            <thead>
+                              <tr>
+                                <th scope="col">Status</th>
+                                <th scope="col">Number of Invoices</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        New
+                                    </td>
+                                    <td>
+                                        {{ new_client_invoice_counts }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Approved
+                                    </td>
+                                    <td>
+                                        {{ approved_client_invoice_counts }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Rejected
+                                    </td>
+                                    <td>
+                                        {{ rejected_client_invoice_counts }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Processed
+                                    </td>
+                                    <td>
+                                        {{ processed_client_invoice_counts }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Postponed
+                                    </td>
+                                    <td>
+                                        {{ postponed_client_invoice_counts }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                          </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="container my-4">
+                <div class="row">
+                    <h1 class="card-title">
+                        Pick Up Requests By Status Pie Chart
+                    </h1>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <canvas id="myChart5"></canvas>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="container my-4">
+                <div class="row">
+                    <h1 class="card-title">
+                        Pick Up Requests Statistics (By Status)
+                    </h1>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <table class="table">
+                            <thead>
+                              <tr>
+                                <th scope="col">Status</th>
+                                <th scope="col">Number of Pick Up Requests</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        Accepted
+                                    </td>
+                                    <td>
+                                        {{ accept_pick_up_request_order_counts }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Rejected
+                                    </td>
+                                    <td>
+                                        {{ reject_pick_up_request_order_counts }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        On Delivery
+                                    </td>
+                                    <td>
+                                        {{ on_delivery_pick_up_request_order_counts }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Recieved
+                                    </td>
+                                    <td>
+                                        {{ receive_pick_up_request_order_counts }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Failed
+                                    </td>
+                                    <td>
+                                        {{ failed_pick_up_request_order_counts }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Pending
+                                    </td>
+                                    <td>
+                                        {{ pending_pick_up_request_order_counts }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                          </table>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="container my-4">
+                <div class="row">
+                    <h1 class="card-title">
+                        Consultation Requests By Status Pie Chart
+                    </h1>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <canvas id="myChart6"></canvas>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="container my-4">
+                <div class="row">
+                    <h1 class="card-title">
+                        Consultations Requests Statistics (By Status)
+                    </h1>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <table class="table">
+                            <thead>
+                              <tr>
+                                <th scope="col">Status</th>
+                                <th scope="col">Number of Consultations Requests</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        New
+                                    </td>
+                                    <td>
+                                        {{ New_Consultant_Manager_Counts }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Confirmed
+                                    </td>
+                                    <td>
+                                        {{ Confirmed_Consultant_Manager_Counts }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Pending
+                                    </td>
+                                    <td>
+                                        {{ Pending_Consultant_Manager_Counts }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Completed
+                                    </td>
+                                    <td>
+                                        {{ Completed_Consultant_Manager_Counts }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Closed
+                                    </td>
+                                    <td>
+                                        {{ Close_Consultant_Manager_Counts }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Rejected
+                                    </td>
+                                    <td>
+                                        {{ Rejected_Consultant_Manager_Counts }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Declined
+                                    </td>
+                                    <td>
+                                        {{ Declined_Consultant_Manager_Counts }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                          </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="container my-5  bg-light">
+                <div class="row">
+                    <h1 class="card-title">
+                        Clients that are not using the mobile app for more than 2 week :   {{ users_count }}
+                    </h1>
+                </div>
+            </div>
+
+
+        </div>
+        </div>
+</div>
+
+{{ New_Consultant_Manager_Counts|json_script:"New_Consultant_Manager_Counts" }}
+{{ Confirmed_Consultant_Manager_Counts|json_script:"Confirmed_Consultant_Manager_Counts" }}
+{{ Pending_Consultant_Manager_Counts|json_script:"Pending_Consultant_Manager_Counts" }}
+{{ Completed_Consultant_Manager_Counts|json_script:"Completed_Consultant_Manager_Counts" }}
+{{ Close_Consultant_Manager_Counts|json_script:"Close_Consultant_Manager_Counts" }}
+{{ Rejected_Consultant_Manager_Counts|json_script:"Rejected_Consultant_Manager_Counts" }}
+{{ Declined_Consultant_Manager_Counts|json_script:"Declined_Consultant_Manager_Counts" }}
+
+{{ accept_pick_up_request_order_counts|json_script:"accept_pick_up_request_order_counts" }}
+{{ reject_pick_up_request_order_counts|json_script:"reject_pick_up_request_order_counts" }}
+{{ on_delivery_pick_up_request_order_counts|json_script:"on_delivery_pick_up_request_order_counts" }}
+{{ receive_pick_up_request_order_counts|json_script:"receive_pick_up_request_order_counts" }}
+{{ failed_pick_up_request_order_counts|json_script:"failed_pick_up_request_order_counts" }}
+{{ pending_pick_up_request_order_counts|json_script:"pending_pick_up_request_order_counts" }}
+
+
+{{  new_client_invoice_counts|json_script:"new_client_invoice" }}
+{{  approved_client_invoice_counts|json_script:"approved_client_invoice" }}
+{{  rejected_client_invoice_counts|json_script:"rejected_client_invoice" }}
+{{  processed_client_invoice_counts|json_script:"processed_client_invoice" }}
+{{  postponed_client_invoice_counts|json_script:"postponed_client_invoice" }}
+
+{{  New_Client_Personal_Info_Objects_counts|json_script:"New_Client_Personal_Info_Objects_counts"   }}
+{{  Active_Client_Personal_Info_Objects_counts|json_script:"Active_Client_Personal_Info_Objects_counts" }}
+{{  Pending_Client_Personal_Info_Objects_counts|json_script:"Pending_Client_Personal_Info_Objects_counts"   }}
+{{  Completed_Client_Personal_Info_Objects_counts|json_script:"Completed_Client_Personal_Info_Objects_counts"   }}
+{{  Disabled_Client_Personal_Info_Objects_counts|json_script:"Disabled_Client_Personal_Info_Objects_counts" }}
+
+
+{{ sector_dict|json_script:"sector_dict" }}
+
+    {{      vat_amount|json_script:"vat_amount"  }}
+    {{      book_amount|json_script:"book_amount"  }}
+
+
+
+
+
+
+
+
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/dashboard.js' %}"></script>
+
+
+
+{% endblock %}
