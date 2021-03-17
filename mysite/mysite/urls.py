@@ -167,6 +167,9 @@ urlpatterns = [
 
     # Admin Dashboard Path
     path("admin/dashboard", ADMIN_DASHBOARD,name="ADMIN_DASHBOARD_URL"),
+
+    # Export to excel sheet
+    path('export/csv', export_users_csv, name='export_users_csv'),
     
 ]
 

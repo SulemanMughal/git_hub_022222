@@ -22,6 +22,7 @@
             <h1 class="card-title">
                 Dashboard
             </h1>
+            <a href="{% url 'export_users_csv' %}">Export all users</a>
         </div>
         <div class="card-body">
             <form action="{% url 'ADMIN_DASHBOARD_URL' %}" method="GET">

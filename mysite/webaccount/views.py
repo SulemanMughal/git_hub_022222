@@ -15,13 +15,25 @@ from .filters import *
 from .forms import *
 from .models import *
 from django.http import HttpResponse
+import openpyxl
 from openpyxl import load_workbook , Workbook # TODO: pip install openpyxl
 # ? For Charts in openpyxl
-from openpyxl.chart import BarChart, Reference, Series
+# from openpyxl.chart import BarChart, Reference, Series
+from openpyxl.chart import (
+    PieChart,
+    ProjectedPieChart,
+    Reference
+)
+from openpyxl.chart.series import DataPoint
+from openpyxl.writer.excel import save_virtual_workbook
+from openpyxl.styles import colors
+from openpyxl.styles import Font, Color
 from django.http import JsonResponse
 import encodings
 from django.core.paginator import Paginator
 from datetime import datetime, timedelta
+import csv
+# import datetime
 
 # ! Things to be noted:
 # request.user.is_superuser == "False" => Relational Manager
@@ -1516,3 +1528,144 @@ def ADMIN_DASHBOARD(request):
         template_name,
         context
     )
+
+
+
+
+
+def export_users_csv(request):
+    # response = HttpResponse(content_type='text/csv')
+    # response['Content-Disposition'] = 'attachment; filename="users.csv"'
+    wb = Workbook()
+    dest_filename = 'empty_book.xlsx'
+    ws1 = wb.active
+    ws1.title = "range names"
+    ws1.append([""])
+    ws1.append([""])
+    ws1.append(['Clients'])
+    # writer = csv.writer(response)
+    # print(wb.cell.cell.Cell.coordinate())
+
+    # # Clients Sections
+    # writer.writerow(['Clients'])
+    ws1.append(['Clients By Service'])
+    # # Clients_Objects = Clients_Objects = Client_Personal_Info.objects.all()
+    ws1.append(['Client ID', 'Client Name', 'Paid Amount', 'Unpaid Amount'])
+    clients = Client_Personal_Info.objects.all().values_list('id', 'Name', 'package_price')
+    for client in clients:
+        ws1.append(client + ('None',))
+
+    # # Sectror Sections
+    ws1.append([""])
+    ws1.append([""])
+    ws1.append(['Sectors By Department'])
+    ws1.append(['Sector ID', 'Sector Name', 'Paid Amount', 'Unpaid Amount'])
+    sector_objects = Sector.objects.all().values_list('id', 'Name' )
+    for sector in sector_objects:
+        ws1.append(sector + (float(Sector.objects.get(id=int(sector[0])).get_paid_amount()), "None"))    
+
+    # ########################################
+    # 
+    # data = ["50", "20"]
+
+    # pie = PieChart()
+    # # labels = Reference(ws1, min_col=1, min_row=2, max_row=5)
+    # # data = Reference(ws1, min_col=2, min_row=1, max_row=5)
+    # pie.add_data(data, titles_from_data=True)
+    # # pie.set_categories(labels)
+    # pie.title = "Pies sold by category"
+
+    # # Cut the first slice out of the pie
+    # slice = DataPoint(idx=0, explosion=20)
+    # pie.series[0].data_points = [slice]
+
+    # ws1.add_chart(pie, "D1")
+    # #########################################
+
+    # Each Service Paid Amount 
+
+    ws1.append([""])
+    ws1.append([""])
+    ws1.append(['Each Service Paid Amount'])
+    ws1.append(['Service', 'Paid Amount'])
+    vat_amount = 0
+    book_amount = 0
+
+    # Paid Amount By VAT:
+
+    ws1.append([""])
+    ws1.append([""])
+    for i in Client_Personal_Info.objects.all().filter(Services="['VAT']"):
+        vat_amount+= float(i.package_price)
+
+    for i in Client_Personal_Info.objects.all().filter(Services="['BookKeeping']"):
+        book_amount+= float(i.package_price)
+
+    ws1.append(["VAT",vat_amount])
+    ws1.append(["Book Keeping ",book_amount])
+
+    # Total Amount UNpaid
+    ws1.append([""])
+    ws1.append(["Total  Amont Unpaid", "2000"])
+
+    # Client Statistics (By Status) 
+    ws1.append([""])
+    ws1.append(["Client Statistics (By Status) "])
+    ws1.append(["Status", "Number of Clients"])
+    ws1.append(["New",  Client_Personal_Info.New_Client_Personal_Info_Objects.all().count()])
+    ws1.append(["Active",  Client_Personal_Info.Active_Client_Personal_Info_Objects.all().count()])
+    ws1.append(["Pending",  Client_Personal_Info.Pending_Client_Personal_Info_Objects.all().count()])
+    ws1.append(["Completed",  Client_Personal_Info.Completed_Client_Personal_Info_Objects.all().count()])
+    ws1.append(["Disabled",  Client_Personal_Info.Disabled_Client_Personal_Info_Objects.all().count()])
+
+
+    # Invoice Statistics (By Status) 
+    ws1.append([""])
+    ws1.append(["Invoice Statistics (By Status) "])
+    ws1.append(["Status", "Number of Invoices"])
+    ws1.append(["New",  clientInvoice.new_client_invoice.all().count()])
+    ws1.append(["Approved",  clientInvoice.approved_client_invoice.all().count()])
+    ws1.append(["Rejected",  clientInvoice.rejected_client_invoice.all().count()])
+    ws1.append(["Processed",  clientInvoice.processed_client_invoice.all().count()])
+    ws1.append(["Postponed",   clientInvoice.postponed_client_invoice.all().count()])
+
+
+    # Pick Up Requests Statistics (By Status) 
+    ws1.append([""])
+    ws1.append(["Pick Up Requests Statistics (By Status) "])
+    ws1.append(["Status", "Number of Pick Up Requests"])
+    ws1.append(["Accepted",  PickUpRequestOrders.accept_pick_up_request_order.all().count()])
+    ws1.append(["Rejected",  PickUpRequestOrders.reject_pick_up_request_order.all().count()])
+    ws1.append(["On Delivery ",  PickUpRequestOrders.on_delivery_pick_up_request_order.all().count()])
+    ws1.append(["Recieved",  PickUpRequestOrders.receive_pick_up_request_order.all().count()])
+    ws1.append(["Failed",   PickUpRequestOrders.failed_pick_up_request_order.all().count()])
+    ws1.append(["Pending",   PickUpRequestOrders.pending_pick_up_request_order.all().count()])
+
+    # Consultations Requests Statistics (By Status) 
+    ws1.append([""])
+    ws1.append(["Consultations Requests Statistics (By Status)"])
+    ws1.append(["Status", " 	Number of Consultations Requests"])
+    ws1.append(["New",  ConsulatationRequest.new_consultant_requests.all().count()])
+    ws1.append(["Confirmed",  ConsulatationRequest.confirmed_consultant_requests.all().count()])
+    ws1.append(["Pending",  ConsulatationRequest.pending_consultant_requests.all().count()])
+    ws1.append(["Completed",  ConsulatationRequest.completed_consultant_requests.all().count()])
+    ws1.append(["Closed",   ConsulatationRequest.close_consultant_requests.all().count()])
+    ws1.append(["Rejected",   ConsulatationRequest.rejected_consultant_requests.all().count()])
+    ws1.append(["Declined",   ConsulatationRequest.declined_consultant_requests.all().count()])
+
+
+    # Clients that are not using the mobile app for more than 2 week : 1 
+    ws1.append([""])
+    d = timezone.now()-timedelta(days=14)
+    users = User.objects.all().filter(last_login__lt = d)
+    ws1.append(["Clients that are not using the mobile app for more than 2 week", users.count()])
+
+    ws1["h1"] = "Date"
+    dttm =datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    ws1["h2"] = dttm
+
+    response = HttpResponse(content=save_virtual_workbook(wb))
+    response['Content-Disposition'] = 'attachment; filename=myexport.xlsx'
+# return response
+
+    return response
